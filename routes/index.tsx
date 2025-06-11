@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router";
 import { LoginPage, ABMPage } from "../containers";
+import { useUserAD } from "../context/authContext";
 
 const index = () => {
-  const [authenticated, setAuthenticated] = useState<boolean>(false);
+  const { authenticated } = useUserAD();
+
   let router = createBrowserRouter([
     {
       path: "/login",
@@ -12,6 +14,14 @@ const index = () => {
     {
       path: "/",
       Component: authenticated ? ABMPage : LoginPage,
+    },
+    {
+      path: "/abm-salud",
+      Component: ABMPage,
+    },
+    {
+      path: "/disponibilidad",
+      Component: ABMPage,
     },
   ]);
 
