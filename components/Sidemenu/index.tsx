@@ -5,11 +5,17 @@ import {
   MenuItemComponent,
   NavBarComponent,
 } from "../index";
+import { Navigate, Outlet } from "react-router";
+import { useUserAD } from "../../context/authContext";
 
 interface SideMenuLayoutProps extends PropsWithChildren<any> {}
 
 const SideMenuLayout: React.FC<SideMenuLayoutProps> = ({ children }: any) => {
   const [menuOpen, setMenuOpen] = useState(true);
+
+  const { authenticated } = useUserAD();
+
+  if (!authenticated) return <Navigate to="/login" replace />;
 
   return (
     <>
@@ -21,7 +27,7 @@ const SideMenuLayout: React.FC<SideMenuLayoutProps> = ({ children }: any) => {
         position="fixed"
         width={menuOpen ? "250px" : "80px"}
         borderRight="1px solid #ccc"
-        transition="width 0.2s ease-in-out"
+        transition="width 0.15s ease-in-out"
         boxSizing="border-box"
         padding="20px 15px"
         pt="75px"
@@ -30,7 +36,15 @@ const SideMenuLayout: React.FC<SideMenuLayoutProps> = ({ children }: any) => {
       </Box>
 
       <ChildrenMenuContainer menuOpen={menuOpen}>
-        {children}
+        <Box
+          as={"main"}
+          bg={"white"}
+          h={"calc(100vh - 60px)"}
+          color={"black"}
+          p={2}
+        >
+          <Outlet />
+        </Box>
       </ChildrenMenuContainer>
     </>
   );

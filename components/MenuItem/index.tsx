@@ -25,7 +25,7 @@ const MenuItem = ({
           width={"fit-content"}
           variant={"plain"}
         >
-          <Icon size="lg" color="tomato">
+          <Icon size="lg" color="teal">
             {isOpen ? <FaChevronLeft /> : <FaAlignJustify />}
           </Icon>
         </Button>
@@ -42,7 +42,7 @@ const MenuItem = ({
               variant={handleSelectedPath(item.path) ? "solid" : "plain"}
               color={"black"}
             >
-              <Icon size="lg" color="tomato">
+              <Icon size="lg" color="teal">
                 <IconComponent />
               </Icon>
               {isOpen ? (

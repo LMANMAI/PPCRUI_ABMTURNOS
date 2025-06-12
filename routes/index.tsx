@@ -1,27 +1,45 @@
-import React, { useState } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router";
-import { LoginPage, ABMPage } from "../containers";
-import { useUserAD } from "../context/authContext";
+import {
+  LoginPage,
+  ABMPage,
+  CentroSaludPage,
+  HomePage,
+  AltaPage,
+  EditPage,
+} from "../containers";
+import { SideMenuLayout } from "../components";
 
 const index = () => {
-  const { authenticated } = useUserAD();
-
   let router = createBrowserRouter([
     {
       path: "/login",
-      Component: LoginPage,
+      element: <LoginPage />,
     },
     {
       path: "/",
-      Component: authenticated ? ABMPage : LoginPage,
-    },
-    {
-      path: "/abm-salud",
-      Component: ABMPage,
-    },
-    {
-      path: "/disponibilidad",
-      Component: ABMPage,
+      element: <SideMenuLayout />,
+      children: [
+        {
+          index: true,
+          element: <HomePage />,
+        },
+        {
+          path: "abm-salud",
+          element: <ABMPage />,
+        },
+        {
+          path: "abm-salud/crear",
+          element: <AltaPage />,
+        },
+        {
+          path: "abm-salud/editar",
+          element: <EditPage />,
+        },
+        {
+          path: "disponibilidad",
+          element: <CentroSaludPage />,
+        },
+      ],
     },
   ]);
 
