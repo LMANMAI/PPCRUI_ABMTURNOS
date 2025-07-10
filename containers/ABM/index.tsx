@@ -36,54 +36,87 @@ const ABMPage = () => {
   return (
     <Stack gap={6} px={6}>
       <TopbarCoponent
-        title={{ name: "Disponibilidad de cajas de seguridad" }}
+        title={{ name: "Gestión de Centros de Salud" }}
         breadcrumb={[
           { text: "Inicio", onClick: () => navigate("/") },
-          { text: "ABM Stock", onClick: () => navigate("/abm-salud") },
+          { text: "ABM Centros", onClick: () => navigate("/abm-salud") },
         ]}
         buttonList={[
           {
-            text: "Gestionar",
+            text: "Crear centro de salud",
             onClick: () => console.log("Gestionar"),
             variant: "solid",
-            colorScheme: "teal",
-          },
-          {
-            text: "Crear",
-            onClick: () => navigate("/abm-salud/crear"),
-            variant: "outline",
             colorScheme: "teal",
           },
         ]}
         menuOptions={[
           {
-            label: "editar",
+            label: "Ver historial de cambios",
+            onClick: () => navigate("/abm-salud/editar"),
+          },
+          {
+            label: "Desactivar centro",
+            onClick: () => navigate("/abm-salud/editar"),
+          },
+          {
+            label: "Duplicar centro",
+            onClick: () => navigate("/abm-salud/editar"),
+          },
+          {
+            label: "Eliminar centro",
             onClick: () => navigate("/abm-salud/editar"),
           },
         ]}
       />
       <Stack direction={"row"}>
         <Stack flex={1}>
-          <Card.Root size="sm">
+          <Card.Root
+            size="sm"
+            bg="white"
+            borderRadius="md"
+            boxShadow="xs"
+            border="1px solid"
+            borderColor="gray.200"
+            color={"black"}
+          >
             <Card.Header>
-              <Heading size="md"> Card - sm</Heading>
+              <Heading size="md"> Crear campaña de vacunación</Heading>
             </Card.Header>
             <Card.Body color="fg.muted">
-              This is the card body. Lorem ipsum dolor sit amet, consectetur
-              adipiscing elit.
+              Organizá campañas masivas y asigná profesionales para vacunar a la
+              población.
             </Card.Body>
+            <Card.Footer>
+              <Button variant={"plain"} color={"black"}>
+                Crear campaña
+              </Button>
+            </Card.Footer>
           </Card.Root>
         </Stack>
 
         <Stack flex={1}>
-          <Card.Root size="sm">
+          <Card.Root
+            size="sm"
+            bg="white"
+            borderRadius="md"
+            boxShadow="xs"
+            border="1px solid"
+            borderColor="gray.200"
+            color={"black"}
+          >
             <Card.Header>
-              <Heading size="md"> Card - sm</Heading>
+              <Heading size="md">Programa sanitario</Heading>
             </Card.Header>
             <Card.Body color="fg.muted">
-              This is the card body. Lorem ipsum dolor sit amet, consectetur
-              adipiscing elit.
+              Generá programas de seguimiento en salud para distintas
+              poblaciones.
             </Card.Body>
+
+            <Card.Footer>
+              <Button variant={"plain"} color={"black"}>
+                Nuevo programa
+              </Button>
+            </Card.Footer>
           </Card.Root>
         </Stack>
       </Stack>

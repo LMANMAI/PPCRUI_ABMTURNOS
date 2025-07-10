@@ -39,7 +39,7 @@ const SideMenuLayout: React.FC<SideMenuLayoutProps> = ({ children }: any) => {
         <Box
           as={"main"}
           bg={"white"}
-          h={"calc(100vh - 60px)"}
+          minHeight={"calc(100vh - 60px)"}
           color={"black"}
           p={2}
         >
