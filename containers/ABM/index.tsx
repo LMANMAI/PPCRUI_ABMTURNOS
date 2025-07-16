@@ -1,37 +1,149 @@
 import React from "react";
 import { useUserAD } from "../../context/authContext";
 import { TopbarCoponent } from "../../components";
-import { Box, Button, Card, Heading, Stack } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Card,
+  Heading,
+  Stack,
+  Menu,
+  Portal,
+  Badge,
+  Drawer,
+  CloseButton,
+} from "@chakra-ui/react";
 import { useNavigate } from "react-router";
 import { Table } from "../../components/Table";
-interface Column<T> {
-  header: string;
-  accessor?: string;
-  textAlign?: "left" | "right" | "center";
+import { FiMoreVertical } from "react-icons/fi";
+import { RiEqualizerFill } from "react-icons/ri";
+
+interface Centro {
+  id: number;
+  name: string;
+  address: string;
+  zone: string;
+  specialties: string;
+  status: "ACTIVO" | "INACTIVO";
+  menu: any;
 }
+export interface Column<T> {
+  header: string;
+  accessor: keyof T;
+  textAlign?: "left" | "center" | "right";
+}
+
 const ABMPage = () => {
+  const [open, setOpen] = React.useState<boolean>(false);
   const { userAD } = useUserAD();
   let navigate = useNavigate();
 
-  const columns: Column<{
-    id: number;
-    name: string;
-    category: string;
-    price: string;
-  }>[] = [
-    { header: "Product", accessor: "name", textAlign: "center" },
-    { header: "Category", accessor: "category", textAlign: "center" },
-    { header: "Price", accessor: "price", textAlign: "right" },
+  const menuOptions = [
+    {
+      label: "Ver centro de salud",
+      onClick: () => navigate("/abm-salud/detail/"),
+    },
+  ];
+  const columns: Column<Centro>[] = [
+    { header: "Nombre del centro", accessor: "name", textAlign: "left" },
+    { header: "Dirección", accessor: "address", textAlign: "left" },
+    { header: "Zona", accessor: "zone", textAlign: "left" },
+    { header: "Especialidades", accessor: "specialties", textAlign: "left" },
+    { header: "Estado", accessor: "status", textAlign: "left" },
+    { header: "", accessor: "menu", textAlign: "center" },
   ];
 
-  const data = [
-    { id: 1, name: "Laptop", category: "Electronics", price: "$999.99" },
-    { id: 2, name: "Chair", category: "Furniture", price: "$150.00" },
-    { id: 1, name: "Laptop", category: "Electronics", price: "$999.99" },
-    { id: 2, name: "Chair", category: "Furniture", price: "$150.00" },
-    { id: 1, name: "Laptop", category: "Electronics", price: "$999.99" },
-    { id: 2, name: "Chair", category: "Furniture", price: "$150.00" },
+  const rawData = [
+    {
+      id: 1,
+      name: "Centro de Salud N°1",
+      address: "Av. Rivadavia 1200",
+      zone: "Centro",
+      specialties: "General, Pediatría",
+      status: "ACTIVO",
+    },
+    {
+      id: 2,
+      name: "Hospital Sur",
+      address: "Av. Mitre 2335",
+      zone: "Sur",
+      specialties: "General, Cardiología",
+      status: "INACTIVO",
+    },
+    {
+      id: 3,
+      name: "Clínica Norte",
+      address: "Calle Belgrano 4035",
+      zone: "Norte",
+      specialties: "General, Odontología",
+      status: "ACTIVO",
+    },
+    {
+      id: 4,
+      name: "Hospital Municipal",
+      address: "Ruta 12 km 3",
+      zone: "Este",
+      specialties: "General",
+      status: "ACTIVO",
+    },
   ];
+
+  const renderMenu = (id: number) => (
+    <Menu.Root>
+      <Menu.Trigger>
+        <Button
+          size="sm"
+          variant="plain"
+          color="black"
+          aria-label="Opciones"
+          px={2}
+          minW="auto"
+        >
+          <FiMoreVertical />
+        </Button>
+      </Menu.Trigger>
+
+      <Portal>
+        <Menu.Positioner>
+          <Menu.Content asChild>
+            <Box
+              bg="white"
+              borderRadius="md"
+              boxShadow="md"
+              py={2}
+              minW="auto"
+              border="1px solid"
+              borderColor="gray.200"
+            >
+              <Menu.Item key={id} value={"Ver centro de salud"} asChild>
+                <Box
+                  px={4}
+                  py={2}
+                  cursor="pointer"
+                  _hover={{ bg: "gray.100" }}
+                  fontWeight={"normal"}
+                  color={"gray.800"}
+                  onClick={() => navigate(`/abm-salud/detail/${id}`)}
+                >
+                  Ver centro de salud
+                </Box>
+              </Menu.Item>
+            </Box>
+          </Menu.Content>
+        </Menu.Positioner>
+      </Portal>
+    </Menu.Root>
+  );
+
+  const data = rawData.map((item) => ({
+    ...item,
+    menu: renderMenu(item.id),
+    status: (
+      <Badge colorPalette={item.status === "ACTIVO" ? "green" : "red"}>
+        {item.status}
+      </Badge>
+    ),
+  }));
 
   return (
     <Stack gap={6} px={6}>
@@ -44,27 +156,9 @@ const ABMPage = () => {
         buttonList={[
           {
             text: "Crear centro de salud",
-            onClick: () => console.log("Gestionar"),
+            onClick: () => navigate("/abm-salud/crear"),
             variant: "solid",
             colorScheme: "teal",
-          },
-        ]}
-        menuOptions={[
-          {
-            label: "Ver historial de cambios",
-            onClick: () => navigate("/abm-salud/editar"),
-          },
-          {
-            label: "Desactivar centro",
-            onClick: () => navigate("/abm-salud/editar"),
-          },
-          {
-            label: "Duplicar centro",
-            onClick: () => navigate("/abm-salud/editar"),
-          },
-          {
-            label: "Eliminar centro",
-            onClick: () => navigate("/abm-salud/editar"),
           },
         ]}
       />
@@ -123,8 +217,15 @@ const ABMPage = () => {
 
       <Stack>
         <Stack alignItems={"end"}>
-          <Button variant="solid" colorPalette="cyan" width="fit-content">
+          <Button
+            variant="outline"
+            width="fit-content"
+            onClick={() => {
+              setOpen(true);
+            }}
+          >
             Filtrar
+            <RiEqualizerFill />
           </Button>
         </Stack>
         <Table
@@ -134,6 +235,38 @@ const ABMPage = () => {
           onRowClick={() => {}}
         />
       </Stack>
+      {/* Pasar este drawer a un componente */}
+      <Drawer.Root
+        open={open}
+        onOpenChange={(e) => setOpen(e.open)}
+        size={"sm"}
+      >
+        <Portal>
+          <Drawer.Backdrop />
+          <Drawer.Positioner>
+            <Drawer.Content>
+              <Drawer.Header>
+                <Drawer.Title>Filtros</Drawer.Title>
+              </Drawer.Header>
+              <Drawer.Body>
+                <p>
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
+                  do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                </p>
+              </Drawer.Body>
+              <Drawer.Footer justifyContent={"flex-start"}>
+                <Button variant="solid" colorPalette={"teal"}>
+                  Aplicar filtros
+                </Button>
+                <Button variant={"outline"}>Limpiar</Button>
+              </Drawer.Footer>
+              <Drawer.CloseTrigger asChild>
+                <CloseButton size="sm" />
+              </Drawer.CloseTrigger>
+            </Drawer.Content>
+          </Drawer.Positioner>
+        </Portal>
+      </Drawer.Root>
     </Stack>
   );
 };

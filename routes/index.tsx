@@ -5,9 +5,9 @@ import {
   CentroSaludPage,
   HomePage,
   AltaPage,
-  EditPage,
 } from "../containers";
 import { SideMenuLayout } from "../components";
+import DetailPage from "../containers/ABM/Detail";
 
 const index = () => {
   let router = createBrowserRouter([
@@ -32,8 +32,8 @@ const index = () => {
           element: <AltaPage />,
         },
         {
-          path: "abm-salud/editar",
-          element: <EditPage />,
+          path: "abm-salud/detail/:id",
+          element: <DetailPage />,
         },
         {
           path: "disponibilidad",

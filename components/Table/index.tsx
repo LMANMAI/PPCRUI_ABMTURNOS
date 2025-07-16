@@ -27,20 +27,41 @@ function CustomTable<T extends Record<string, any>>({
   variant = "simple",
 }: CustomTableProps<T>) {
   return (
-    <Table.Root size="sm" showColumnBorder>
+    <Table.Root size="sm">
       <Table.Header>
-        <Table.Row borderRadius={5}>
-          <Table.ColumnHeader>Product</Table.ColumnHeader>
-          <Table.ColumnHeader>Category</Table.ColumnHeader>
-          <Table.ColumnHeader textAlign="end">Price</Table.ColumnHeader>
-        </Table.Row>
+        {columns.map((col) => (
+          <Table.ColumnHeader
+            key={String(col.accessor)}
+            textAlign={col.textAlign}
+            fontWeight="bold"
+            fontSize="sm"
+            borderBottom="1px solid"
+            borderColor="gray.200"
+          >
+            {col.header}
+          </Table.ColumnHeader>
+        ))}
       </Table.Header>
       <Table.Body>
-        {data.map((item) => (
-          <Table.Row key={item.id}>
-            <Table.Cell>{item.name}</Table.Cell>
-            <Table.Cell>{item.category}</Table.Cell>
-            <Table.Cell textAlign="end">{item.price}</Table.Cell>
+        {data.map((row) => (
+          <Table.Row
+            key={String(row[rowKey])}
+            cursor={onRowClick ? "pointer" : undefined}
+            _hover={onRowClick ? { bg: "gray.50" } : undefined}
+            onClick={() => onRowClick?.(row)}
+          >
+            {columns.map((col) => {
+              const cell = row[col.accessor];
+              return (
+                <Table.Cell
+                  key={String(col.accessor)}
+                  textAlign={col.textAlign}
+                  py={3}
+                >
+                  {cell}
+                </Table.Cell>
+              );
+            })}
           </Table.Row>
         ))}
       </Table.Body>

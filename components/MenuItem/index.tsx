@@ -12,9 +12,7 @@ const MenuItem = ({
   isOpenFn: (value: boolean) => void;
 }) => {
   let navigate = useNavigate();
-  const handleSelectedPath = (path: string) => {
-    return path === window.location.pathname;
-  };
+  const currentPath = window.location.pathname;
 
   return (
     <Box py={4}>
@@ -34,13 +32,19 @@ const MenuItem = ({
       <Stack marginTop={150}>
         {MenuOptionList.map((item: any) => {
           const IconComponent = FaIcons[item.icon as keyof typeof FaIcons];
+          const selected = item.path === currentPath;
+
           return (
             <Button
-              onClick={() => {
-                navigate(item.path);
-              }}
-              variant={handleSelectedPath(item.path) ? "solid" : "plain"}
-              color={"black"}
+              key={item.path}
+              onClick={() => navigate(item.path)}
+              variant="ghost"
+              justifyContent={isOpen ? "flex-start" : "center"}
+              w={isOpen ? "100%" : "auto"}
+              p={3}
+              bg={selected ? "white" : "transparent"}
+              color={selected ? "teal.500" : "gray.800"}
+              _hover={{ bg: selected ? "white" : "gray.100" }}
             >
               <Icon size="lg" color="teal">
                 <IconComponent />

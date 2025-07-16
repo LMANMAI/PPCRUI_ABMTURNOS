@@ -7,7 +7,7 @@ import system from "../config/theme";
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <ChakraProvider value={system}>
-      <ThemeProvider attribute="class">
+      <ThemeProvider attribute="class" defaultTheme="light">
         <App />
       </ThemeProvider>
     </ChakraProvider>

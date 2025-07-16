@@ -10,8 +10,6 @@ import {
   Breadcrumb,
   Menu,
 } from "@chakra-ui/react";
-// import * as Breadcrumb from "@chakra-ui/react/components/breadcrumb";
-// import * as Menu from "@chakra-ui/react/components/menu";
 import { FiMoreVertical } from "react-icons/fi";
 import { LiaSlashSolid } from "react-icons/lia";
 
