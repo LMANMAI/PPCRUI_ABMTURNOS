@@ -14,7 +14,9 @@ export function ModuleBox({ header, children, footer }: ModuleBoxProps) {
       borderRadius="md"
       boxShadow="sm"
       p={6}
-      maxH="60dvh"
+      minH="300px"
+      maxH={"70vh"}
+      //minH="60dvh"
       overflowY="auto"
     >
       {/* HEADER */}
