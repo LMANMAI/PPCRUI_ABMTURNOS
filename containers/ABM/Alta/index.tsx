@@ -51,18 +51,19 @@ const AltaPage = () => {
         }
         footer={
           <Stack flexDirection={"row"}>
-            {step === 2 && (
-              <Button variant="outline" onClick={() => setStep(1)}>
-                Volver
-              </Button>
-            )}
             {step === 1 ? (
-              <Button colorScheme="teal" onClick={() => setStep(2)}>
+              <Button colorPalette="teal" onClick={() => setStep(2)}>
                 Continuar
               </Button>
             ) : (
-              <Button colorScheme="teal" onClick={() => console.log("Enviar")}>
+              <Button colorPalette="teal" onClick={() => console.log("Enviar")}>
                 Crear centro
+              </Button>
+            )}
+
+            {step === 2 && (
+              <Button variant="outline" onClick={() => setStep(1)}>
+                Volver
               </Button>
             )}
           </Stack>
