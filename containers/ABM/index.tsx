@@ -80,7 +80,6 @@ const ABMPage = () => {
     })),
   });
 
-  console.log(estadosCollection);
   const renderMenu = (id: number) => (
     <Menu.Root>
       <Menu.Trigger>
