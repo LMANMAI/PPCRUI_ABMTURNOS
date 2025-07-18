@@ -7,7 +7,8 @@ export { default as EspecialidadesPage } from "./ABM/Detail/Especialidades";
 export { default as HorariosPage } from "./ABM/Detail/HorAtencion";
 export { default as PersonalPage } from "./ABM/Detail/Personal";
 export { default as DocumentacionPage } from "./ABM/Detail/Documentacion";
-
+export { default as CrearCampaniaScreen } from "./ABM/CampVacunacion";
+export { default as ProgramaSanitarioScreen } from "./ABM/ProgramaSanitario";
 //centro
 export { default as CentroSaludPage } from "./CentroDeSalud";
 export { default as HomePage } from "./Home";

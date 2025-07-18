@@ -39,7 +39,7 @@ const AltaPage = () => {
           { text: "ABM Centros", onClick: () => navigate("/abm-salud") },
           {
             text: "Nuevo centro",
-            onClick: () => navigate("/abm-salud/crearz"),
+            onClick: () => navigate("/abm-salud/crear"),
           },
         ]}
       />
@@ -84,6 +84,7 @@ const AltaPage = () => {
                     <Field.Label>Nombre del centro</Field.Label>
                     <Input placeholder="Ej: Hospital Municipal Ituzaingó" />
                   </Field.Root>
+
                   <Field.Root required>
                     <Select.Root
                       collection={frameworks}

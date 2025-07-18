@@ -15,12 +15,13 @@ import {
   Field,
   Select,
   Input,
+  createListCollection,
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router";
 import { Table } from "../../components/Table";
 import { FiMoreVertical } from "react-icons/fi";
 import { RiEqualizerFill } from "react-icons/ri";
-
+import { rawData } from "./static";
 interface Centro {
   id: number;
   name: string;
@@ -38,6 +39,11 @@ export interface Column<T> {
 
 const ABMPage = () => {
   const [open, setOpen] = React.useState<boolean>(false);
+  const [filterName, setFilterName] = React.useState("");
+  const [filterZone, setFilterZone] = React.useState<string>("");
+  const [filterSpecialty, setFilterSpecialty] = React.useState<string>("");
+  const [filterStatus, setFilterStatus] = React.useState<string>("");
+
   const { userAD } = useUserAD();
   let navigate = useNavigate();
 
@@ -49,42 +55,32 @@ const ABMPage = () => {
     { header: "Estado", accessor: "status", textAlign: "left" },
     { header: "", accessor: "menu", textAlign: "center" },
   ];
+  const zonas = ["Centro", "Norte", "Sur", "Este", "Oeste"];
+  const especialidades = ["General", "Pediatría", "Cardiología", "Odontología"];
+  const estados = ["ACTIVO", "INACTIVO"];
 
-  const rawData = [
-    {
-      id: 1,
-      name: "Centro de Salud N°1",
-      address: "Av. Rivadavia 1200",
-      zone: "Centro",
-      specialties: "General, Pediatría",
-      status: "ACTIVO",
-    },
-    {
-      id: 2,
-      name: "Hospital Sur",
-      address: "Av. Mitre 2335",
-      zone: "Sur",
-      specialties: "General, Cardiología",
-      status: "INACTIVO",
-    },
-    {
-      id: 3,
-      name: "Clínica Norte",
-      address: "Calle Belgrano 4035",
-      zone: "Norte",
-      specialties: "General, Odontología",
-      status: "ACTIVO",
-    },
-    {
-      id: 4,
-      name: "Hospital Municipal",
-      address: "Ruta 12 km 3",
-      zone: "Este",
-      specialties: "General",
-      status: "ACTIVO",
-    },
-  ];
+  const zonasCollection = createListCollection({
+    items: zonas.map((z) => ({
+      label: z,
+      value: z,
+    })),
+  });
 
+  const espCollection = createListCollection({
+    items: especialidades.map((e) => ({
+      label: e,
+      value: e,
+    })),
+  });
+
+  const estadosCollection = createListCollection({
+    items: estados.map((s) => ({
+      label: s,
+      value: s,
+    })),
+  });
+
+  console.log(estadosCollection);
   const renderMenu = (id: number) => (
     <Menu.Root>
       <Menu.Trigger>
@@ -178,7 +174,13 @@ const ABMPage = () => {
               población.
             </Card.Body>
             <Card.Footer>
-              <Button variant={"plain"} color={"black"}>
+              <Button
+                variant={"plain"}
+                color={"black"}
+                onClick={() => {
+                  navigate("/abm-salud/crear-campaña");
+                }}
+              >
                 Crear campaña
               </Button>
             </Card.Footer>
@@ -204,7 +206,13 @@ const ABMPage = () => {
             </Card.Body>
 
             <Card.Footer>
-              <Button variant={"plain"} color={"black"}>
+              <Button
+                variant={"plain"}
+                color={"black"}
+                onClick={() => {
+                  navigate("/abm-salud/crear-programa-sanitario");
+                }}
+              >
                 Nuevo programa
               </Button>
             </Card.Footer>
@@ -238,90 +246,134 @@ const ABMPage = () => {
           <Drawer.Backdrop />
           <Drawer.Positioner>
             <Drawer.Content>
-              {/* Header */}
               <Drawer.Header>
                 <Drawer.Title>Filtros</Drawer.Title>
               </Drawer.Header>
-
-              {/* Body con formularios */}
               <Drawer.Body>
                 <Stack gap={4}>
-                  {/* Buscar por nombre */}
-                  <Field.Root>
+                  <Field.Root required>
                     <Field.Label>Buscar por nombre</Field.Label>
-                    <Input placeholder="Ingrese un nombre" />
+                    <Input
+                      placeholder="Ingrese un nombre"
+                      onChange={(e) => setFilterName(e.target.value)}
+                    />
                   </Field.Root>
 
-                  {/* Zona */}
                   <Field.Root required>
-                    <Select.Root collection={[]} size="sm" width="320px">
+                    <Field.Label>Zona</Field.Label>
+                    <Select.Root
+                      collection={zonasCollection}
+                      size="md"
+                      onValueChange={(details: any) =>
+                        setFilterZone(details.value)
+                      }
+                    >
                       <Select.HiddenSelect />
-                      <Select.Label>Zona</Select.Label>
                       <Select.Control>
                         <Select.Trigger>
-                          <Select.ValueText placeholder="Select framework" />
+                          <Select.ValueText placeholder="Seleccione zona" />
                         </Select.Trigger>
                         <Select.IndicatorGroup>
                           <Select.Indicator />
+                          <Select.ClearTrigger />
                         </Select.IndicatorGroup>
                       </Select.Control>
+
                       <Portal>
                         <Select.Positioner>
-                          <Select.Content>
-                            <Select.Item
-                              item={"2"}
-                              //key={framework.value}
-                            >
-                              2
-                              <Select.ItemIndicator />
-                            </Select.Item>
+                          <Select.Content zIndex="popover">
+                            {zonasCollection.items.map((item) => (
+                              <Select.Item item={item} key={item.value}>
+                                {item.label}
+                                <Select.ItemIndicator />
+                              </Select.Item>
+                            ))}
                           </Select.Content>
                         </Select.Positioner>
                       </Portal>
                     </Select.Root>
                   </Field.Root>
 
-                  {/* Especialidad */}
-                  <Field.Root>
+                  <Field.Root required>
                     <Field.Label>Especialidad</Field.Label>
-                    <Select placeholder="Seleccione una especialidad">
-                      <option value="pediatria">Pediatría</option>
-                      <option value="cardiologia">Cardiología</option>
-                      <option value="odontologia">Odontología</option>
-                      <option value="traumatologia">Traumatología</option>
-                    </Select>
+                    <Select.Root
+                      collection={espCollection}
+                      size="md"
+                      onValueChange={(details: any) =>
+                        setFilterSpecialty(details.value)
+                      }
+                    >
+                      <Select.HiddenSelect />
+                      <Select.Control>
+                        <Select.Trigger>
+                          <Select.ValueText placeholder="Seleccione especialidad" />
+                        </Select.Trigger>
+                        <Select.IndicatorGroup>
+                          <Select.Indicator />
+                          <Select.ClearTrigger />
+                        </Select.IndicatorGroup>
+                      </Select.Control>
+
+                      <Portal>
+                        <Select.Positioner>
+                          <Select.Content zIndex="popover">
+                            {espCollection.items.map((item) => (
+                              <Select.Item item={item} key={item.value}>
+                                {item.label}
+                                <Select.ItemIndicator />
+                              </Select.Item>
+                            ))}
+                          </Select.Content>
+                        </Select.Positioner>
+                      </Portal>
+                    </Select.Root>
                   </Field.Root>
 
-                  {/* Estado */}
                   <Field.Root>
                     <Field.Label>Estado</Field.Label>
-                    <Select placeholder="Seleccione un estado">
-                      <option value="ACTIVO">Activo</option>
-                      <option value="INACTIVO">Inactivo</option>
-                    </Select>
+                    <Select.Root
+                      collection={estadosCollection}
+                      size="md"
+                      onValueChange={(details: any) =>
+                        setFilterStatus(details.value)
+                      }
+                    >
+                      <Select.HiddenSelect />
+                      <Select.Control>
+                        <Select.Trigger>
+                          <Select.ValueText placeholder="Seleccione estado" />
+                        </Select.Trigger>
+                        <Select.IndicatorGroup>
+                          <Select.Indicator />
+                          <Select.ClearTrigger />
+                        </Select.IndicatorGroup>
+                      </Select.Control>
+                      <Portal>
+                        <Select.Positioner>
+                          <Select.Content zIndex="popover">
+                            {estadosCollection.items.map((item) => (
+                              <Select.Item item={item} key={item.value}>
+                                {item.label}
+                                <Select.ItemIndicator />
+                              </Select.Item>
+                            ))}
+                          </Select.Content>
+                        </Select.Positioner>
+                      </Portal>
+                    </Select.Root>
                   </Field.Root>
                 </Stack>
               </Drawer.Body>
 
-              {/* Footer con botones */}
               <Drawer.Footer justifyContent="flex-start">
                 <Button
-                  colorScheme="teal"
+                  colorPalette="teal"
                   mr={3}
-                  onClick={() => {
-                    // aquí llamás a tu lógica de aplicar filtros
-                    setOpen(false);
-                  }}
+                  onClick={() => setOpen(false)}
                 >
                   Aplicar filtros
                 </Button>
-                <Button
-                  variant="outline"
-                  onClick={() => {
-                    // reset de filtros si necesitás
-                    setOpen(false);
-                  }}
-                >
+                <Button variant="outline" onClick={() => setOpen(false)}>
                   Cerrar
                 </Button>
               </Drawer.Footer>
