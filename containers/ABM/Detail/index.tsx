@@ -59,22 +59,22 @@ export default function DetailPage() {
     {
       label: "Ver personal",
       desc: "Consultá el listado completo de profesionales asignados al centro, incluyendo roles y horarios.",
-      onClick: () => navigate(`/abm-salud/${centroId}/personal`),
+      onClick: () => navigate(`/abm-salud/detail/${centroId}/personal`),
     },
     {
       label: "Especialidades",
       desc: "Visualizá y gestioná las especialidades médicas habilitadas en este centro.",
-      onClick: () => navigate(`/abm-salud/${centroId}/especialidades`),
+      onClick: () => navigate(`/abm-salud/detail/${centroId}/especialidades`),
     },
     {
       label: "Horarios de atención",
       desc: "Revisá y modificá los días y horarios de atención del centro, tanto generales como por especialidad.",
-      onClick: () => navigate(`/abm-salud/${centroId}/horarios`),
+      onClick: () => navigate(`/abm-salud/detail/${centroId}/horarios`),
     },
     {
       label: "Documentación del centro",
       desc: "Accedé a archivos y datos asociados al centro: habilitaciones, protocolos, y otra información relevante.",
-      onClick: () => navigate(`/abm-salud/${centroId}/documentacion`),
+      onClick: () => navigate(`/abm-salud/detail/${centroId}/documentacion`),
     },
   ];
 

@@ -5,6 +5,10 @@ import {
   CentroSaludPage,
   HomePage,
   AltaPage,
+  EspecialidadesPage,
+  HorariosPage,
+  PersonalPage,
+  DocumentacionPage,
 } from "../containers";
 import { SideMenuLayout } from "../components";
 import DetailPage from "../containers/ABM/Detail";
@@ -34,6 +38,24 @@ const index = () => {
         {
           path: "abm-salud/detail/:id",
           element: <DetailPage />,
+        },
+
+        {
+          path: "/abm-salud/detail/:id/especialidades",
+          element: <EspecialidadesPage />,
+        },
+        {
+          path: "/abm-salud/detail/:id/horarios",
+          element: <HorariosPage />,
+        },
+
+        {
+          path: "/abm-salud/detail/:id/personal",
+          element: <PersonalPage />,
+        },
+        {
+          path: "/abm-salud/detail/:id/documentacion",
+          element: <DocumentacionPage />,
         },
         {
           path: "disponibilidad",

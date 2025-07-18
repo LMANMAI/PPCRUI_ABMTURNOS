@@ -10,7 +10,7 @@ import {
   Icon,
   Input,
   InputGroup,
-  // InputLeftElement,
+  Image,
   Link,
   Stack,
   Text,
@@ -35,49 +35,41 @@ const LoginPage = () => {
       >
         <Box width="100%" maxW="400px">
           <Stack align="center" mb={6}>
-            {/* {icono de ituzainfo} */}
-            <Icon as={FaRegEnvelope} boxSize={12} color="gray.400" />
-            <Heading size="md">Login to your account</Heading>
+            {/* {icono de ituzaingo} */}
+            {/* <Icon as={FaRegEnvelope} boxSize={12} color="gray.400" /> */}
+            <Image
+              src="/itubrand.png"
+              alt="Logo Ituzaingó"
+              width={100}
+              height={100}
+              objectFit="contain"
+            />
+            <Heading size="md">Centros medicos Ituzaingo</Heading>
             <Text fontSize="sm" color="gray.500">
-              Enter your details to login.
+              Ingresa a tu cuenta y cominenza a administrar tu centro de salud
             </Text>
           </Stack>
 
-          {/* <Divider my={4} /> */}
-
           <Stack>
             <InputGroup startElement={<FaUser />}>
-              <Input placeholder="Username" />
+              <Input placeholder="Legajo o mail" />
             </InputGroup>
             <InputGroup startElement={<FaLock />}>
-              <Input placeholder="Username" />
+              <Input placeholder="Contraseña" />
             </InputGroup>
-            {/* <InputGroup>
-              <InputLeftElement pointerEvents="none">
-                <EmailIcon color="gray.400" />
-              </InputLeftElement>
-              <Input placeholder="Email Address" type="email" />
-            </InputGroup>
-
-            <InputGroup>
-              <InputLeftElement pointerEvents="none">
-                <FaLock  color="gray.400" />
-              </InputLeftElement>
-              <Input placeholder="Password" type="password" />
-            </InputGroup> */}
 
             <Flex justify="space-between" align="center">
-              {/* <Checkbox colorScheme="gray">Keep me logged in</Checkbox> */}
               <Link fontSize="sm" color="blue.500">
-                Forgot password?
+                ¿Olvidaste tu contraseña?
               </Link>
             </Flex>
 
             <Button
               bgGradient="linear(to-r, gray.800, gray.900)"
               //color="white"
-              _hover={{ bg: "gray.700", color: "white" }}
-              variant={"subtle"}
+              _hover={{ color: "white" }}
+              variant={"solid"}
+              colorPalette={"teal"}
               onClick={() => {
                 setUserAD({
                   username: "USERPRUEBA@correo.com",
@@ -91,27 +83,27 @@ const LoginPage = () => {
                 navigate("/");
               }}
             >
-              Login
+              Ingresar
             </Button>
           </Stack>
 
           <Text mt={10} fontSize="xs" textAlign="center" color="gray.400">
-            © 2025 Metals.money
+            © 2025 Practicas profesionalisantes
           </Text>
         </Box>
       </Flex>
 
-      {/* Sección derecha - Testimonio */}
+      {/* Sección derecha  */}
       <Flex
         display={{ base: "none", md: "flex" }}
         flex={1}
         align="center"
         justify="center"
-        bg="gray.50"
+        bg="teal.500"
         px={8}
       >
         <Box maxW="md" textAlign="left">
-          <Text fontWeight="bold" fontSize="lg" mb={4}>
+          {/* <Text fontWeight="bold" fontSize="lg" mb={4}>
             The Marketing Management app has revolutionized our tasks.{" "}
             <Text as="span" fontWeight="normal" color="gray.600">
               It's efficient and user-friendly, streamlining planning to
@@ -123,7 +115,7 @@ const LoginPage = () => {
           </Text>
           <Text fontSize="sm" color="gray.500">
             CEO / Catalyst
-          </Text>
+          </Text> */}
         </Box>
       </Flex>
     </Flex>

@@ -1,9 +1,7 @@
 import { Table } from "@chakra-ui/react";
 
-import React from "react";
-
 // Types
-interface Column<T> {
+export interface Column<T> {
   header: string;
   accessor?: string;
   textAlign?: "left" | "right" | "center";
@@ -68,5 +66,4 @@ function CustomTable<T extends Record<string, any>>({
     </Table.Root>
   );
 }
-
 export { CustomTable as Table };

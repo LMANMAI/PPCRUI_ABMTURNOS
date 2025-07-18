@@ -12,6 +12,9 @@ import {
   Badge,
   Drawer,
   CloseButton,
+  Field,
+  Select,
+  Input,
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router";
 import { Table } from "../../components/Table";
@@ -38,12 +41,6 @@ const ABMPage = () => {
   const { userAD } = useUserAD();
   let navigate = useNavigate();
 
-  const menuOptions = [
-    {
-      label: "Ver centro de salud",
-      onClick: () => navigate("/abm-salud/detail/"),
-    },
-  ];
   const columns: Column<Centro>[] = [
     { header: "Nombre del centro", accessor: "name", textAlign: "left" },
     { header: "Dirección", accessor: "address", textAlign: "left" },
@@ -236,32 +233,102 @@ const ABMPage = () => {
         />
       </Stack>
       {/* Pasar este drawer a un componente */}
-      <Drawer.Root
-        open={open}
-        onOpenChange={(e) => setOpen(e.open)}
-        size={"sm"}
-      >
+      <Drawer.Root open={open} onOpenChange={(e) => setOpen(e.open)} size="sm">
         <Portal>
           <Drawer.Backdrop />
           <Drawer.Positioner>
             <Drawer.Content>
+              {/* Header */}
               <Drawer.Header>
                 <Drawer.Title>Filtros</Drawer.Title>
               </Drawer.Header>
+
+              {/* Body con formularios */}
               <Drawer.Body>
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
-                  do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                </p>
+                <Stack gap={4}>
+                  {/* Buscar por nombre */}
+                  <Field.Root>
+                    <Field.Label>Buscar por nombre</Field.Label>
+                    <Input placeholder="Ingrese un nombre" />
+                  </Field.Root>
+
+                  {/* Zona */}
+                  <Field.Root required>
+                    <Select.Root collection={[]} size="sm" width="320px">
+                      <Select.HiddenSelect />
+                      <Select.Label>Zona</Select.Label>
+                      <Select.Control>
+                        <Select.Trigger>
+                          <Select.ValueText placeholder="Select framework" />
+                        </Select.Trigger>
+                        <Select.IndicatorGroup>
+                          <Select.Indicator />
+                        </Select.IndicatorGroup>
+                      </Select.Control>
+                      <Portal>
+                        <Select.Positioner>
+                          <Select.Content>
+                            <Select.Item
+                              item={"2"}
+                              //key={framework.value}
+                            >
+                              2
+                              <Select.ItemIndicator />
+                            </Select.Item>
+                          </Select.Content>
+                        </Select.Positioner>
+                      </Portal>
+                    </Select.Root>
+                  </Field.Root>
+
+                  {/* Especialidad */}
+                  <Field.Root>
+                    <Field.Label>Especialidad</Field.Label>
+                    <Select placeholder="Seleccione una especialidad">
+                      <option value="pediatria">Pediatría</option>
+                      <option value="cardiologia">Cardiología</option>
+                      <option value="odontologia">Odontología</option>
+                      <option value="traumatologia">Traumatología</option>
+                    </Select>
+                  </Field.Root>
+
+                  {/* Estado */}
+                  <Field.Root>
+                    <Field.Label>Estado</Field.Label>
+                    <Select placeholder="Seleccione un estado">
+                      <option value="ACTIVO">Activo</option>
+                      <option value="INACTIVO">Inactivo</option>
+                    </Select>
+                  </Field.Root>
+                </Stack>
               </Drawer.Body>
-              <Drawer.Footer justifyContent={"flex-start"}>
-                <Button variant="solid" colorPalette={"teal"}>
+
+              {/* Footer con botones */}
+              <Drawer.Footer justifyContent="flex-start">
+                <Button
+                  colorScheme="teal"
+                  mr={3}
+                  onClick={() => {
+                    // aquí llamás a tu lógica de aplicar filtros
+                    setOpen(false);
+                  }}
+                >
                   Aplicar filtros
                 </Button>
-                <Button variant={"outline"}>Limpiar</Button>
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    // reset de filtros si necesitás
+                    setOpen(false);
+                  }}
+                >
+                  Cerrar
+                </Button>
               </Drawer.Footer>
+
+              {/* Close Trigger */}
               <Drawer.CloseTrigger asChild>
-                <CloseButton size="sm" />
+                <CloseButton position="absolute" top="8px" right="8px" />
               </Drawer.CloseTrigger>
             </Drawer.Content>
           </Drawer.Positioner>
