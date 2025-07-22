@@ -124,7 +124,6 @@ export default function CentroSaludPage() {
     </Menu.Root>
   );
 
-  // --- transformamos los datos para la tabla ---
   const tableData = turnos.map((t) => ({
     ...t,
     estadoBadge: (
@@ -145,19 +144,18 @@ export default function CentroSaludPage() {
 
   return (
     <Stack gap={6} px={6} pt={4}>
-      {/* Topbar */}
       <TopbarCoponent
-        title={{ name: "Turnos del Día" }}
+        title={{ name: "Hospital Municipal" }}
         breadcrumb={[
           { text: "Inicio", onClick: () => navigate("/") },
           {
-            text: `Centro ${centroId}`,
+            text: `Hospital Municipal`,
             onClick: () => navigate(`/centros/${centroId}`),
           },
         ]}
+        menuOptions={[{ label: "Registrar usuario", onClick: () => {} }]}
       />
 
-      {/* Cards */}
       <Stack direction="row" gap={4}>
         <Stack flex={1}>
           <Card.Root
@@ -172,7 +170,8 @@ export default function CentroSaludPage() {
               <Heading size="md">Gestionar campaña de vacunación</Heading>
             </Card.Header>
             <Card.Body color="fg.muted">
-              {/* aquí va info opcional o texto descriptivo */}
+              Administra la campaña de vacunación o revisa si este centro esta
+              habilitado
             </Card.Body>
             <Card.Footer>
               <Button
@@ -198,7 +197,7 @@ export default function CentroSaludPage() {
               <Heading size="md">Reservar turno</Heading>
             </Card.Header>
             <Card.Body color="fg.muted">
-              {/* texto descriptivo si lo necesitas */}
+              Reserva un turno para usuarios sin aplicacion
             </Card.Body>
             <Card.Footer>
               <Button
