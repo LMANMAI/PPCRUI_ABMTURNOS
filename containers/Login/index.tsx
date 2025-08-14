@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Avatar,
   Box,
@@ -19,9 +19,35 @@ import { FaRegEnvelope, FaLock, FaUser } from "react-icons/fa6";
 import { useUserAD } from "../../context/authContext";
 import { useNavigate } from "react-router";
 
+import { loginSuccess } from "../../features/authSlice";
+import { useDispatch } from "react-redux";
+
 const LoginPage = () => {
-  const { setUserAD, setAuthenticated } = useUserAD();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const canSubmit = username.trim() !== "" && password.trim() !== "";
+
+  const handleLogin = () => {
+    setLoading(true);
+    const mockUser = {
+      username: username,
+      name: "USER PRUEBA",
+      groups: [""],
+      legajo: "l0000001",
+      account: {},
+      suc: [],
+    };
+    dispatch(loginSuccess(mockUser));
+    setTimeout(() => {
+      setLoading(false);
+      navigate("/");
+    }, 1200);
+  };
 
   return (
     <Flex height="100vh" width="100%">
@@ -46,16 +72,24 @@ const LoginPage = () => {
             />
             <Heading size="md">Centros medicos Ituzaingo</Heading>
             <Text fontSize="sm" color="gray.500">
-              Ingresa a tu cuenta y cominenza a administrar tu centro de salud
+              Ingresa a tu cuenta y comienza a administrar tu centro de salud
             </Text>
           </Stack>
 
           <Stack>
             <InputGroup startElement={<FaUser />}>
-              <Input placeholder="Legajo o mail" />
+              <Input
+                placeholder="Legajo o mail"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+              />
             </InputGroup>
             <InputGroup startElement={<FaLock />}>
-              <Input placeholder="Contraseña" />
+              <Input
+                placeholder="Contraseña"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
             </InputGroup>
 
             <Flex justify="space-between" align="center">
@@ -66,21 +100,13 @@ const LoginPage = () => {
 
             <Button
               bgGradient="linear(to-r, gray.800, gray.900)"
-              //color="white"
+              disabled={!canSubmit || loading}
               _hover={{ color: "white" }}
               variant={"solid"}
+              loading={loading}
               colorPalette={"teal"}
               onClick={() => {
-                setUserAD({
-                  username: "USERPRUEBA@correo.com",
-                  name: "USER PRUEBA",
-                  groups: [""],
-                  legajo: "l0000001",
-                  account: {},
-                  suc: [],
-                });
-                setAuthenticated(true);
-                navigate("/");
+                handleLogin();
               }}
             >
               Ingresar

@@ -5,8 +5,13 @@
     "moduleResolution": "Bundler",
     "skipLibCheck": true,
     "jsx": "react-jsx",
+      "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
-    }
-  }
+     "@/*": ["*"],         
+      "@src/*": ["src/*"]
+    },
+
+  },
+  "include": ["src", "features", "store", "vite-env.d.ts"],
+  "exclude": ["node_modules", "dist"]
 }

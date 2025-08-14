@@ -7,13 +7,14 @@ import {
 } from "../index";
 import { Navigate, Outlet } from "react-router";
 import { useUserAD } from "../../context/authContext";
+import { useAppSelector } from "../../store";
+import { selectIsAuthenticated } from "../../features/authSlice";
 
 interface SideMenuLayoutProps extends PropsWithChildren<any> {}
 
 const SideMenuLayout: React.FC<SideMenuLayoutProps> = ({ children }: any) => {
   const [menuOpen, setMenuOpen] = useState(true);
-
-  const { authenticated } = useUserAD();
+  const authenticated = useAppSelector(selectIsAuthenticated);
 
   if (!authenticated) return <Navigate to="/login" replace />;
 

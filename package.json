@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:mock": "concurrently \"vite\" \"json-server --watch db.json --port 3001\"",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview"
@@ -12,15 +13,23 @@
   "dependencies": {
     "@chakra-ui/react": "^3.20.0",
     "@emotion/react": "^11.14.0",
+    "@faker-js/faker": "^9.9.0",
+    "@reduxjs/toolkit": "^2.8.2",
+    "axios": "^1.11.0",
+    "concurrently": "^9.2.0",
+    "json-server": "^1.0.0-beta.3",
+    "msw": "^2.10.5",
     "next-themes": "^0.4.6",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-icons": "^5.5.0",
+    "react-redux": "^9.2.0",
     "react-router": "^7.6.2",
     "recharts": "^3.1.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.25.0",
+    "@types/node": "^24.2.1",
     "@types/react": "^19.1.2",
     "@types/react-dom": "^19.1.2",
     "@types/recharts": "^1.8.29",
@@ -29,6 +38,7 @@
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.19",
     "globals": "^16.0.0",
+    "ts-node": "^10.9.2",
     "typescript": "~5.8.3",
     "typescript-eslint": "^8.30.1",
     "vite": "^6.3.5",
