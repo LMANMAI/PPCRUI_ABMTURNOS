@@ -7,7 +7,7 @@ import useFetch from "../../../../hooks/useFetch";
 import { ABM_LOCAL } from "../../../../config/constanst";
 import { renderRowMenu } from "../../../../helpers/renderRowMenu";
 
-const AdministrarCampañasVacunacionScreen = () => {
+const AdministrarProgramaSanitarioScreen = () => {
   let navigate = useNavigate();
 
   const [loading, setLoading] = useState<boolean>(false);
@@ -64,21 +64,22 @@ const AdministrarCampañasVacunacionScreen = () => {
   return (
     <Stack px={6} py={8} gap={6}>
       <TopbarCoponent
-        title={{ name: "Gestión de campañas de vacunacíon" }}
+        title={{ name: "Gestión de programas sanitarios" }}
         breadcrumb={[
           { text: "Inicio", onClick: () => navigate("/") },
           { text: "ABM Centros", onClick: () => navigate("/abm-salud") },
           {
-            text: "Administrar campañas",
+            text: "Administrar programas",
             onClick: () => {
-              navigate("/abm-salud/campañas");
+              navigate("/abm-salud/programas");
             },
           },
         ]}
         buttonList={[
           {
-            text: "Crear campaña de vacunación",
-            onClick: () => navigate("/abm-salud/campañas/crear-campaña"),
+            text: "Crear programa sanitario",
+            onClick: () =>
+              navigate("/abm-salud/programas/crear-programa-sanitario"),
             variant: "solid",
             colorScheme: "teal",
           },
@@ -110,4 +111,4 @@ const AdministrarCampañasVacunacionScreen = () => {
   );
 };
 
-export default AdministrarCampañasVacunacionScreen;
+export default AdministrarProgramaSanitarioScreen;

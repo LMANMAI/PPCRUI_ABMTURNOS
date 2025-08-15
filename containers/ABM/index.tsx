@@ -30,6 +30,7 @@ import {
   /*rawData,*/ zonas,
 } from "./static";
 import useFetch from "../../hooks/useFetch";
+import { renderRowMenu } from "../../helpers/renderRowMenu";
 
 const ABMPage = () => {
   const [open, setOpen] = useState<boolean>(false);
@@ -71,53 +72,6 @@ const ABMPage = () => {
     })),
   });
 
-  const renderMenu = (id: number) => (
-    <Menu.Root>
-      <Menu.Trigger>
-        <Button
-          size="sm"
-          variant="plain"
-          color="black"
-          aria-label="Opciones"
-          px={2}
-          minW="auto"
-        >
-          <FiMoreVertical />
-        </Button>
-      </Menu.Trigger>
-
-      <Portal>
-        <Menu.Positioner>
-          <Menu.Content asChild>
-            <Box
-              bg="white"
-              borderRadius="md"
-              boxShadow="md"
-              py={2}
-              minW="auto"
-              border="1px solid"
-              borderColor="gray.200"
-            >
-              <Menu.Item key={id} value={"Ver centro de salud"} asChild>
-                <Box
-                  px={4}
-                  py={2}
-                  cursor="pointer"
-                  _hover={{ bg: "gray.100" }}
-                  fontWeight={"normal"}
-                  color={"gray.800"}
-                  onClick={() => navigate(`/abm-salud/detail/${id}`)}
-                >
-                  Ver centro de salud
-                </Box>
-              </Menu.Item>
-            </Box>
-          </Menu.Content>
-        </Menu.Positioner>
-      </Portal>
-    </Menu.Root>
-  );
-
   //consulto al ep los centro de salud
 
   const {
@@ -135,7 +89,13 @@ const ABMPage = () => {
       setDataToTable(
         centersData.data.map((item) => ({
           ...item,
-          menu: renderMenu(item.id),
+          menu: renderRowMenu(item.id, [
+            {
+              label: "Ver centro de salud",
+              action: (id) => navigate(`/abm-salud/detail/${id}`),
+              value: "ver-centro",
+            },
+          ]),
           status: (
             <Badge colorPalette={item.status === "ACTIVO" ? "green" : "red"}>
               {item.status}
@@ -224,7 +184,7 @@ const ABMPage = () => {
                 variant={"plain"}
                 color={"black"}
                 onClick={() => {
-                  navigate("/abm-salud/crear-programa-sanitario");
+                  navigate("/abm-salud/programas");
                 }}
               >
                 Nuevo programa

@@ -17,8 +17,8 @@ import {
   Select,
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router";
-import { TopbarCoponent } from "../../../components";
-import { ModuleBox } from "../../../components/ModuleBox";
+import { TopbarCoponent } from "../../../../components";
+import { ModuleBox } from "../../../../components/ModuleBox";
 
 const poblaciones = [
   { label: "Adultos mayores", value: "mayores" },
@@ -41,8 +41,8 @@ export default function ProgramaSanitarioScreen() {
 
   const handleSubmit = () => {
     console.log({ name, description, startDate, endDate, targets });
-    // aquí iría llamada a API…
-    navigate("/abm-salud");
+
+    navigate("/abm-salud//programas");
   };
 
   return (
@@ -52,6 +52,12 @@ export default function ProgramaSanitarioScreen() {
         breadcrumb={[
           { text: "Inicio", onClick: () => navigate("/") },
           { text: "ABM Centros", onClick: () => navigate("/abm-salud") },
+          {
+            text: "Administrar programas",
+            onClick: () => {
+              navigate("/abm-salud/programas");
+            },
+          },
           { text: "Programa sanitario", onClick: () => {} },
         ]}
       />

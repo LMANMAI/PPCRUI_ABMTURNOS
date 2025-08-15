@@ -10,7 +10,8 @@ export { default as DocumentacionPage } from "./ABM/Detail/Documentacion";
 export { default as CrearCampaniaScreen } from "./ABM/CampVacunacion/Alta";
 export { default as AdministrarCampañasVacunacionScreen } from "./ABM/CampVacunacion/Administrar";
 
-export { default as ProgramaSanitarioScreen } from "./ABM/ProgramaSanitario";
+export { default as ProgramaSanitarioScreen } from "./ABM/ProgramaSanitario/Alta";
+export { default as AdministrarProgramaSanitarioScreen } from "./ABM/ProgramaSanitario/Administrar";
 
 //centro
 export { default as CentroSaludPage } from "./CentroDeSalud";
