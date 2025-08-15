@@ -192,7 +192,7 @@ const ABMPage = () => {
                 variant={"plain"}
                 color={"black"}
                 onClick={() => {
-                  navigate("/abm-salud/crear-campaña");
+                  navigate("/abm-salud/campañas");
                 }}
               >
                 Crear campaña

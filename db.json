@@ -38,5 +38,69 @@
       "status": "ACTIVO"
     }
   ]
+  },
+  "campaigns": {
+     "totalPages": 5,
+    "pageNumber": 1,
+    "pageSize": 10,
+    "totalResults": 42,
+   "data" : [
+     {
+      "id": 101,
+      "name": "Campaña Antigripal 2025 - Adultos",
+      "startDate": "2025-05-01",
+      "endDate": "2025-08-31",
+      "status": "ACTIVA"
+    },
+    {
+      "id": 102,
+      "name": "Sarampión y Rubéola Escolar",
+      "startDate": "2025-03-15",
+      "endDate": "2025-04-30",
+      "status": "FINALIZADA"
+    },
+    {
+      "id": 103,
+      "name": "Hepatitis B - Jóvenes",
+      "startDate": "2025-09-01",
+      "endDate": "2025-10-15",
+      "status": "BORRADOR"
+    },
+    {
+      "id": 104,
+      "name": "COVID-19 Refuerzo Otoño",
+      "startDate": "2025-04-01",
+      "endDate": "2025-06-15",
+      "status": "FINALIZADA"
+    },
+    {
+      "id": 105,
+      "name": "Neumococo Mayores de 65",
+      "startDate": "2025-07-01",
+      "endDate": "2025-12-31",
+      "status": "ACTIVA"
+    },
+    {
+      "id": 106,
+      "name": "Calendario Escolar - Triple Viral",
+      "startDate": "2025-02-10",
+      "endDate": "2025-03-30",
+      "status": "FINALIZADA"
+    },
+    {
+      "id": 107,
+      "name": "HPV Adolescentes",
+      "startDate": "2025-08-05",
+      "endDate": "2025-09-30",
+      "status": "PAUSADA"
+    },
+    {
+      "id": 108,
+      "name": "Fiebre Amarilla Viajeros",
+      "startDate": "2025-01-15",
+      "endDate": "2025-12-15",
+      "status": "ACTIVA"
+    }
+   ]
   }
 }

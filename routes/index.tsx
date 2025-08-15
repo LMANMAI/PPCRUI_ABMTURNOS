@@ -11,6 +11,7 @@ import {
   DocumentacionPage,
   CrearCampaniaScreen,
   ProgramaSanitarioScreen,
+  AdministrarCampañasVacunacionScreen,
 } from "../containers";
 import { SideMenuLayout } from "../components";
 import DetailPage from "../containers/ABM/Detail";
@@ -38,11 +39,19 @@ const index = () => {
           element: <AltaPage />,
         },
         {
-          path: "abm-salud/crear-campaña",
+          path: "abm-salud/campañas",
+          element: <AdministrarCampañasVacunacionScreen />,
+        },
+        {
+          path: "abm-salud/campañas/crear-campaña",
           element: <CrearCampaniaScreen />,
         },
         {
-          path: "abm-salud/crear-programa-sanitario",
+          path: "abm-salud/programas",
+          element: <ProgramaSanitarioScreen />,
+        },
+        {
+          path: "abm-salud/programas/crear-programa-sanitario",
           element: <ProgramaSanitarioScreen />,
         },
         {
