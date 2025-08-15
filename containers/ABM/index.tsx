@@ -1,5 +1,5 @@
-import React from "react";
-import { useUserAD } from "../../context/authContext";
+import React, { useEffect } from "react";
+// import { useUserAD } from "../../context/authContext";
 import { TopbarCoponent } from "../../components";
 import {
   Box,
@@ -21,43 +21,27 @@ import { useNavigate } from "react-router";
 import { Table } from "../../components/Table";
 import { FiMoreVertical } from "react-icons/fi";
 import { RiEqualizerFill } from "react-icons/ri";
-import { rawData } from "./static";
-interface Centro {
-  id: number;
-  name: string;
-  address: string;
-  zone: string;
-  specialties: string;
-  status: "ACTIVO" | "INACTIVO";
-  menu: any;
-}
-export interface Column<T> {
-  header: string;
-  accessor: keyof T;
-  textAlign?: "left" | "center" | "right";
-}
+import { ABM_LOCAL } from "../../config/constanst";
+import {
+  Centro,
+  columns,
+  especialidades,
+  estados,
+  /*rawData,*/ zonas,
+} from "./static";
+import useFetch from "../../hooks/useFetch";
 
 const ABMPage = () => {
   const [open, setOpen] = React.useState<boolean>(false);
+  const [loading, setLoading] = React.useState<boolean>(false);
+  const [dataToTable, setDataToTable] = React.useState<Centro[]>([]);
   const [filterName, setFilterName] = React.useState("");
   const [filterZone, setFilterZone] = React.useState<string>("");
   const [filterSpecialty, setFilterSpecialty] = React.useState<string>("");
   const [filterStatus, setFilterStatus] = React.useState<string>("");
 
-  const { userAD } = useUserAD();
+  // const { userAD } = useUserAD();
   let navigate = useNavigate();
-
-  const columns: Column<Centro>[] = [
-    { header: "Nombre del centro", accessor: "name", textAlign: "left" },
-    { header: "Dirección", accessor: "address", textAlign: "left" },
-    { header: "Zona", accessor: "zone", textAlign: "left" },
-    { header: "Especialidades", accessor: "specialties", textAlign: "left" },
-    { header: "Estado", accessor: "status", textAlign: "left" },
-    { header: "", accessor: "menu", textAlign: "center" },
-  ];
-  const zonas = ["Centro", "Norte", "Sur", "Este", "Oeste"];
-  const especialidades = ["General", "Pediatría", "Cardiología", "Odontología"];
-  const estados = ["ACTIVO", "INACTIVO"];
 
   const zonasCollection = createListCollection({
     items: zonas.map((z) => ({
@@ -127,15 +111,33 @@ const ABMPage = () => {
     </Menu.Root>
   );
 
-  const data = rawData.map((item) => ({
-    ...item,
-    menu: renderMenu(item.id),
-    status: (
-      <Badge colorPalette={item.status === "ACTIVO" ? "green" : "red"}>
-        {item.status}
-      </Badge>
-    ),
-  }));
+  //consulto al ep los centro de salud
+
+  const {
+    data: centersData,
+    isLoading,
+    error: errorMessage,
+  } = useFetch<any>(ABM_LOCAL.GET_HEALTH_CENTERS, {
+    useInitialFetch: true,
+  });
+
+  useEffect(() => {
+    setLoading(true);
+    if (centersData && centersData.data) {
+      setLoading(false);
+      setDataToTable(
+        centersData.data.map((item) => ({
+          ...item,
+          menu: renderMenu(item.id),
+          status: (
+            <Badge colorPalette={item.status === "ACTIVO" ? "green" : "red"}>
+              {item.status}
+            </Badge>
+          ),
+        }))
+      );
+    }
+  }, [centersData]);
 
   return (
     <Stack gap={6} px={6}>
@@ -233,10 +235,13 @@ const ABMPage = () => {
           </Button>
         </Stack>
         <Table
-          data={data}
+          data={dataToTable}
           columns={columns}
           rowKey="id"
           onRowClick={() => {}}
+          loading={loading}
+          loadingText="Obteniendo el listado de las sucursales"
+          variant="outline"
         />
       </Stack>
       {/* Pasar este drawer a un componente */}

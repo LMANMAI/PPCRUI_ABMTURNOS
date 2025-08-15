@@ -18,11 +18,11 @@ import {
 import { useNavigate } from "react-router";
 import { TopbarCoponent } from "../../../components";
 import { ModuleBox } from "../../../components/ModuleBox";
-import { rawData } from "../../../containers/ABM/static";
+//import { rawData } from "../../../containers/ABM/static";
 
 export default function CrearCampaniaScreen() {
   const navigate = useNavigate();
-  const activeCenters = rawData.filter((c) => c.status === "ACTIVO");
+  const activeCenters = /*rawData*/ [].filter((c) => c.status === "ACTIVO");
 
   const [name, setName] = useState("");
   const [startDate, setStartDate] = useState("");
