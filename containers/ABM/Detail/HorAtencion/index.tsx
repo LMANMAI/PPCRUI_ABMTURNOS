@@ -83,7 +83,7 @@ export default function HorariosPage() {
   }));
 
   return (
-    <Stack gap={6} px={6} py={8}>
+    <Stack gap={6} px={6}>
       <TopbarCoponent
         title={{ name: "Horarios de atención" }}
         breadcrumb={[

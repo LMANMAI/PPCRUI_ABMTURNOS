@@ -137,7 +137,7 @@ export default function EspecialidadesPage() {
     }));
 
   return (
-    <Stack gap={6} px={6} py={8}>
+    <Stack gap={6} px={6}>
       <TopbarCoponent
         title={{ name: `Especialidades de ${centro.name}` }}
         breadcrumb={[

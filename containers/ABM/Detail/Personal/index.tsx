@@ -147,7 +147,7 @@ export default function PersonalPage() {
     }));
 
   return (
-    <Stack gap={6} px={6} py={8}>
+    <Stack gap={6} px={6}>
       <TopbarCoponent
         title={{ name: `Personal del centro ${centroId}` }}
         breadcrumb={[

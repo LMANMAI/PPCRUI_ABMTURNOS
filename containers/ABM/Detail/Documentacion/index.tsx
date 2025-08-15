@@ -56,7 +56,7 @@ export default function DocumentacionPage() {
   const centro = rawData.find((c) => c.id === centroId);
 
   return (
-    <Stack gap={6} px={6} py={8}>
+    <Stack gap={6} px={6}>
       <TopbarCoponent
         title={{ name: `Documentacion de ${centro.name}` }}
         breadcrumb={[
