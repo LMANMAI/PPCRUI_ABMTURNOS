@@ -82,11 +82,7 @@ const TopbarComponent: React.FC<TopbarProps> = ({
                     </Breadcrumb.Link>
                   )}
                 </Breadcrumb.Item>
-                {idx !== breadcrumb.length - 1 && (
-                  <Breadcrumb.Separator>
-                    <LiaSlashSolid />
-                  </Breadcrumb.Separator>
-                )}
+                {idx !== breadcrumb.length - 1 && <Breadcrumb.Separator />}
               </React.Fragment>
             ))}
           </Breadcrumb.List>

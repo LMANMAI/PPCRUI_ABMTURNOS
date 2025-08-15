@@ -46,7 +46,7 @@ export default function ProgramaSanitarioScreen() {
   };
 
   return (
-    <Stack px={6} py={8} gap={6}>
+    <Stack px={6} gap={6}>
       <TopbarCoponent
         title={{ name: "Crear programa sanitario" }}
         breadcrumb={[
