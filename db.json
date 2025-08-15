@@ -1,6 +1,9 @@
 {
   "centros": {
-    
+    "totalPages": 5,
+    "pageNumber": 1,
+    "pageSize": 10,
+    "totalResults": 42,
     "data": [
     {
       "id": 1,

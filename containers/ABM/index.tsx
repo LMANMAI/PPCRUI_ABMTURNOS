@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 // import { useUserAD } from "../../context/authContext";
 import { TopbarCoponent } from "../../components";
 import {
@@ -32,13 +32,20 @@ import {
 import useFetch from "../../hooks/useFetch";
 
 const ABMPage = () => {
-  const [open, setOpen] = React.useState<boolean>(false);
-  const [loading, setLoading] = React.useState<boolean>(false);
-  const [dataToTable, setDataToTable] = React.useState<Centro[]>([]);
-  const [filterName, setFilterName] = React.useState("");
-  const [filterZone, setFilterZone] = React.useState<string>("");
-  const [filterSpecialty, setFilterSpecialty] = React.useState<string>("");
-  const [filterStatus, setFilterStatus] = React.useState<string>("");
+  const [open, setOpen] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [dataToTable, setDataToTable] = useState<Centro[]>([]);
+  const [page, setPage] = useState(1);
+  const [pagination, setPagination] = useState<any>({
+    totalPages: "",
+    pageNumber: "",
+    pageSize: "",
+    totalResults: "",
+  });
+  const [filterName, setFilterName] = useState("");
+  const [filterZone, setFilterZone] = useState<string>("");
+  const [filterSpecialty, setFilterSpecialty] = useState<string>("");
+  const [filterStatus, setFilterStatus] = useState<string>("");
 
   // const { userAD } = useUserAD();
   let navigate = useNavigate();
@@ -136,6 +143,12 @@ const ABMPage = () => {
           ),
         }))
       );
+      setPagination({
+        totalPages: centersData.totalPages,
+        pageNumber: centersData.pageNumber,
+        pageSize: centersData.pageSize,
+        totalResults: centersData.totalResults,
+      });
     }
   }, [centersData]);
 
@@ -242,6 +255,15 @@ const ABMPage = () => {
           loading={loading}
           loadingText="Obteniendo el listado de las sucursales"
           variant="outline"
+          clientPaginate={false}
+          pagination={{
+            page,
+            pageSize: pagination.pageSize || 10,
+            total: pagination.totalResults || 0,
+            onPageChange: (p) => {
+              setPage(p);
+            },
+          }}
         />
       </Stack>
       {/* Pasar este drawer a un componente */}

@@ -1,5 +1,9 @@
 import React from "react";
-import { TopbarCoponent } from "../../../components";
+import {
+  TopbarCoponent,
+  FormFieldInput,
+  FormFieldSelect,
+} from "../../../components";
 import { useNavigate } from "react-router";
 import {
   Button,
@@ -8,27 +12,37 @@ import {
   Grid,
   GridItem,
   Text,
-  Field,
-  Input,
-  Select,
-  Textarea,
-  Portal,
-  createListCollection,
+  Separator,
 } from "@chakra-ui/react";
 import { ModuleBox } from "../../../components/ModuleBox";
-
-const frameworks = createListCollection({
-  items: [
-    { label: "React.js", value: "react" },
-    { label: "Vue.js", value: "vue" },
-    { label: "Angular", value: "angular" },
-    { label: "Svelte", value: "svelte" },
-  ],
-});
+import { diasOptions, horas24Options, zonasOptions } from "./statics";
 
 const AltaPage = () => {
   let navigate = useNavigate();
   const [step, setStep] = React.useState(1);
+  const [form, setForm] = React.useState({
+    name: "",
+    zone: "",
+    capacity: "",
+    address: "",
+    description: "",
+    phone: "",
+    email: "",
+    hours: "",
+    respName: "",
+    respPhone: "",
+    respMatricula: "",
+    dayStart: "",
+    dayEnd: "",
+    hourStart: "",
+    hourEnd: "",
+    lat: "",
+    lng: "",
+    municipalPermit: null as File | null,
+    approvedPlan: null as File | null,
+    protocolFile: null as File | null,
+    otherDocs: null as File | null,
+  });
 
   return (
     <Stack px={6}>
@@ -37,12 +51,10 @@ const AltaPage = () => {
         breadcrumb={[
           { text: "Inicio", onClick: () => navigate("/") },
           { text: "ABM Centros", onClick: () => navigate("/abm-salud") },
-          {
-            text: "Nuevo centro",
-            onClick: () => navigate("/abm-salud/crear"),
-          },
+          { text: "Nuevo centro", onClick: () => navigate("/abm-salud/crear") },
         ]}
       />
+
       <ModuleBox
         header={
           <Heading size="md">
@@ -56,11 +68,13 @@ const AltaPage = () => {
                 Continuar
               </Button>
             ) : (
-              <Button colorPalette="teal" onClick={() => console.log("Enviar")}>
+              <Button
+                colorPalette="teal"
+                onClick={() => console.log("Enviar", form)}
+              >
                 Crear centro
               </Button>
             )}
-
             {step === 2 && (
               <Button variant="outline" onClick={() => setStep(1)}>
                 Volver
@@ -71,90 +85,211 @@ const AltaPage = () => {
       >
         {step === 1 && (
           <>
-            <Grid templateColumns="repeat(12, 1fr)" gap="6">
-              <GridItem colSpan={4}>
+            <Grid templateColumns="repeat(12, 1fr)" gap={6}>
+              <GridItem colSpan={{ base: 12, lg: 4 }}>
                 <Heading size="md">Información del centro</Heading>
                 <Text mb="3" fontSize="md" color="fg.muted">
                   Completá los datos generales del establecimiento.
                 </Text>
               </GridItem>
-              <GridItem colSpan={8}>
-                <Grid templateColumns="repeat(3, 1fr)" gap={6}>
-                  <Field.Root required>
-                    <Field.Label>Nombre del centro</Field.Label>
-                    <Input placeholder="Ej: Hospital Municipal Ituzaingó" />
-                  </Field.Root>
 
-                  <Field.Root required>
-                    <Select.Root
-                      collection={frameworks}
+              <GridItem colSpan={{ base: 12, lg: 8 }}>
+                <Grid templateColumns="repeat(12, 1fr)" gap={6}>
+                  <GridItem colSpan={{ base: 4, md: 4 }}>
+                    <FormFieldInput
+                      required
+                      label="Nombre del centro"
+                      placeholder="Ej: Hospital Municipal Ituzaingó"
+                      value={form.name}
+                      onChange={(e) =>
+                        setForm((s) => ({ ...s, name: e.target.value }))
+                      }
+                    />
+                  </GridItem>
+
+                  <GridItem colSpan={{ base: 4, md: 4 }}>
+                    <FormFieldSelect
+                      required
+                      label="Zona"
+                      options={zonasOptions}
+                      placeholder="Seleccione zona"
                       size="sm"
-                      width="320px"
-                    >
-                      <Select.HiddenSelect />
-                      <Select.Label>Zona</Select.Label>
-                      <Select.Control>
-                        <Select.Trigger>
-                          <Select.ValueText placeholder="Select framework" />
-                        </Select.Trigger>
-                        <Select.IndicatorGroup>
-                          <Select.Indicator />
-                        </Select.IndicatorGroup>
-                      </Select.Control>
-                      <Portal>
-                        <Select.Positioner>
-                          <Select.Content>
-                            {frameworks.items.map((framework) => (
-                              <Select.Item
-                                item={framework}
-                                key={framework.value}
-                              >
-                                {framework.label}
-                                <Select.ItemIndicator />
-                              </Select.Item>
-                            ))}
-                          </Select.Content>
-                        </Select.Positioner>
-                      </Portal>
-                    </Select.Root>
-                  </Field.Root>
-                  <Field.Root required>
-                    <Field.Label>Capacidad de consultorios</Field.Label>
-                    <Input placeholder="Ej: 6" type="number" />
-                  </Field.Root>
-                  <Field.Root required>
-                    <Field.Label>Dirección</Field.Label>
-                    <Input placeholder="Ej: Av. Rivadavia 1200" />
-                  </Field.Root>
-                  <Field.Root>
-                    <Field.Label>Descripción</Field.Label>
-                    <Textarea placeholder="Ej: Centro de salud con guardia 24 hs y especialidades básicas." />
-                  </Field.Root>
+                      variant="outline"
+                      value={form.zone}
+                      onChange={(v) =>
+                        setForm((s) => ({ ...s, zone: v as string }))
+                      }
+                    />
+                  </GridItem>
+
+                  <GridItem colSpan={{ base: 4, md: 4 }}>
+                    <FormFieldInput
+                      required
+                      label="Capacidad de consultorios"
+                      placeholder="Ej: 6"
+                      type="number"
+                      value={form.capacity}
+                      onChange={(e) =>
+                        setForm((s) => ({ ...s, capacity: e.target.value }))
+                      }
+                    />
+                  </GridItem>
+
+                  <GridItem colSpan={{ base: 4 }}>
+                    <FormFieldInput
+                      required
+                      label="Dirección"
+                      placeholder="Ej: Av. Rivadavia 1200"
+                      value={form.address}
+                      onChange={(e) =>
+                        setForm((s) => ({ ...s, address: e.target.value }))
+                      }
+                    />
+                  </GridItem>
+
+                  <GridItem colSpan={{ base: 4, md: 4 }}>
+                    <FormFieldInput
+                      required
+                      label="Latitud"
+                      placeholder="Ej: -34.123456"
+                      value={form.address}
+                      onChange={(e) =>
+                        setForm((s) => ({ ...s, address: e.target.value }))
+                      }
+                    />
+                  </GridItem>
+
+                  <GridItem colSpan={{ base: 4, md: 4 }}>
+                    <FormFieldInput
+                      required
+                      label="Longitud"
+                      placeholder="Ej: -58.123456"
+                      value={form.address}
+                      onChange={(e) =>
+                        setForm((s) => ({ ...s, address: e.target.value }))
+                      }
+                    />
+                  </GridItem>
+
+                  <GridItem colSpan={{ base: 12 }}>
+                    <FormFieldInput
+                      label="Descripción"
+                      placeholder="Ej: Centro de salud con guardia 24 hs y especialidades básicas."
+                      textarea
+                      value={form.description}
+                      onChange={(e) =>
+                        setForm((s) => ({ ...s, description: e.target.value }))
+                      }
+                    />
+                  </GridItem>
                 </Grid>
               </GridItem>
             </Grid>
 
-            <Grid templateColumns="repeat(12, 1fr)" gap="6" mt={10}>
-              <GridItem colSpan={4}>
+            <Separator margin={5} />
+
+            <Grid templateColumns="repeat(12, 1fr)" gap={6} mt={10}>
+              <GridItem colSpan={{ base: 12, lg: 4 }}>
                 <Heading size="md">Datos de contacto</Heading>
                 <Text mb="3" fontSize="md" color="fg.muted">
                   Información para la comunicación directa con el centro.
                 </Text>
               </GridItem>
-              <GridItem colSpan={8}>
-                <Grid templateColumns="repeat(3, 1fr)" gap={6}>
-                  <Field.Root required>
-                    <Field.Label>Teléfono</Field.Label>
-                    <Input placeholder="Ej: +54 11 4455-6789" />
-                  </Field.Root>
-                  <Field.Root required>
-                    <Field.Label>Correo electrónico</Field.Label>
-                    <Input placeholder="Ej: contacto@salud.ituzaingo.gob.ar" />
-                  </Field.Root>
-                  <Field.Root>
-                    <Field.Label>Horarios de atención</Field.Label>
-                    <Input placeholder="Ej: Lunes a viernes de 8 a 17 hs" />
-                  </Field.Root>
+
+              <GridItem colSpan={{ base: 12, lg: 8 }}>
+                <Grid templateColumns="repeat(12, 1fr)" gap={6}>
+                  <GridItem colSpan={{ base: 12, md: 6 }}>
+                    <FormFieldInput
+                      required
+                      label="Teléfono"
+                      placeholder="Ej: +54 11 4455-6789"
+                      value={form.phone}
+                      onChange={(e) =>
+                        setForm((s) => ({ ...s, phone: e.target.value }))
+                      }
+                    />
+                  </GridItem>
+
+                  <GridItem colSpan={{ base: 12, md: 6 }}>
+                    <FormFieldInput
+                      required
+                      label="Correo electrónico"
+                      placeholder="Ej: contacto@salud.ituzaingo.gob.ar"
+                      value={form.email}
+                      onChange={(e) =>
+                        setForm((s) => ({ ...s, email: e.target.value }))
+                      }
+                    />
+                  </GridItem>
+
+                  <GridItem colSpan={{ base: 12, md: 6 }}>
+                    <FormFieldSelect
+                      required
+                      label="Día de inicio de atención"
+                      options={diasOptions}
+                      placeholder="Seleccioná un día"
+                      size="sm"
+                      width="100%"
+                      value={form.dayStart}
+                      onChange={(v) =>
+                        setForm((s) => ({
+                          ...s,
+                          dayStart: Array.isArray(v) ? v[0] : v,
+                        }))
+                      }
+                    />
+                  </GridItem>
+                  <GridItem colSpan={{ base: 12, md: 6 }}>
+                    <FormFieldSelect
+                      required
+                      label="Día de fin de atención"
+                      options={diasOptions}
+                      placeholder="Seleccioná un día"
+                      size="sm"
+                      width="100%"
+                      value={form.dayEnd}
+                      onChange={(v) =>
+                        setForm((s) => ({
+                          ...s,
+                          dayEnd: Array.isArray(v) ? v[0] : v,
+                        }))
+                      }
+                    />
+                  </GridItem>
+                  <GridItem colSpan={{ base: 12, md: 6 }}>
+                    <FormFieldSelect
+                      required
+                      label="Horario desde (24 h)"
+                      options={horas24Options}
+                      placeholder="Seleccioná hora (24 h)"
+                      size="sm"
+                      width="100%"
+                      value={form.hourStart}
+                      onChange={(v) =>
+                        setForm((s) => ({
+                          ...s,
+                          hourStart: Array.isArray(v) ? v[0] : v,
+                        }))
+                      }
+                    />
+                  </GridItem>
+                  <GridItem colSpan={{ base: 12, md: 6 }}>
+                    <FormFieldSelect
+                      required
+                      label="Horario hasta (24 h)"
+                      options={horas24Options}
+                      placeholder="Seleccioná hora (24 h)"
+                      size="sm"
+                      width="100%"
+                      value={form.hourEnd}
+                      onChange={(v) =>
+                        setForm((s) => ({
+                          ...s,
+                          hourEnd: Array.isArray(v) ? v[0] : v,
+                        }))
+                      }
+                    />
+                  </GridItem>
                 </Grid>
               </GridItem>
             </Grid>
@@ -163,57 +298,122 @@ const AltaPage = () => {
 
         {step === 2 && (
           <>
-            <Grid templateColumns="repeat(12, 1fr)" gap="6" mt={10}>
-              <GridItem colSpan={4}>
-                <Heading size="md">Datos del responsable medico</Heading>
+            {/* DATOS DEL RESPONSABLE MÉDICO */}
+            <Grid templateColumns="repeat(12, 1fr)" gap={6} mt={10}>
+              <GridItem colSpan={{ base: 12, lg: 4 }}>
+                <Heading size="md">Datos del responsable médico</Heading>
                 <Text mb="3" fontSize="md" color="fg.muted">
                   Completá los datos del profesional responsable del centro,
                   según los requisitos del Ministerio de Salud.
                 </Text>
               </GridItem>
-              <GridItem colSpan={8}>
-                <Grid templateColumns="repeat(3, 1fr)" gap={6}>
-                  <Field.Root required>
-                    <Field.Label>Nombre completo</Field.Label>
-                    <Input placeholder="Ej: Dra. María Rodríguez" />
-                  </Field.Root>
-                  <Field.Root required>
-                    <Field.Label>Teléfono institucional</Field.Label>
-                    <Input placeholder="Ej: +54 11 4455-7890" />
-                  </Field.Root>
-                  <Field.Root required>
-                    <Field.Label>Matrícula profesional</Field.Label>
-                    <Input placeholder="Ej: MN 123456" />
-                  </Field.Root>
+
+              <GridItem colSpan={{ base: 12, lg: 8 }}>
+                <Grid templateColumns="repeat(12, 1fr)" gap={6}>
+                  <GridItem colSpan={{ base: 12, md: 4 }}>
+                    <FormFieldInput
+                      required
+                      label="Nombre completo"
+                      placeholder="Ej: Dra. María Rodríguez"
+                      value={form.respName}
+                      onChange={(e) =>
+                        setForm((s) => ({ ...s, respName: e.target.value }))
+                      }
+                    />
+                  </GridItem>
+
+                  <GridItem colSpan={{ base: 12, md: 4 }}>
+                    <FormFieldInput
+                      required
+                      label="Teléfono institucional"
+                      placeholder="Ej: +54 11 4455-7890"
+                      value={form.respPhone}
+                      onChange={(e) =>
+                        setForm((s) => ({ ...s, respPhone: e.target.value }))
+                      }
+                    />
+                  </GridItem>
+
+                  <GridItem colSpan={{ base: 12, md: 4 }}>
+                    <FormFieldInput
+                      required
+                      label="Matrícula profesional"
+                      placeholder="Ej: MN 123456"
+                      value={form.respMatricula}
+                      onChange={(e) =>
+                        setForm((s) => ({
+                          ...s,
+                          respMatricula: e.target.value,
+                        }))
+                      }
+                    />
+                  </GridItem>
                 </Grid>
               </GridItem>
             </Grid>
 
-            <Grid templateColumns="repeat(12, 1fr)" gap="6" mt={10}>
-              <GridItem colSpan={4}>
+            {/* DOCUMENTACIÓN REQUERIDA */}
+            <Grid templateColumns="repeat(12, 1fr)" gap={6} mt={10}>
+              <GridItem colSpan={{ base: 12, lg: 4 }}>
                 <Heading size="md">Documentación requerida</Heading>
                 <Text mb="3" fontSize="md" color="fg.muted">
                   Adjuntá los archivos necesarios para su habilitación.
                 </Text>
               </GridItem>
-              <GridItem colSpan={8}>
-                <Grid templateColumns="repeat(2, 1fr)" gap={6}>
-                  <Field.Root height={"fit-content"}>
-                    <Field.Label>Habilitación municipal</Field.Label>
-                    <Input type="file" padding={2} />
-                  </Field.Root>
-                  <Field.Root>
-                    <Field.Label>Plano aprobado</Field.Label>
-                    <Input type="file" padding={2} />
-                  </Field.Root>
-                  <Field.Root>
-                    <Field.Label>Protocolo de atención</Field.Label>
-                    <Input type="file" padding={2} />
-                  </Field.Root>
-                  <Field.Root>
-                    <Field.Label>Otros documentos</Field.Label>
-                    <Input type="file" padding={2} />
-                  </Field.Root>
+
+              <GridItem colSpan={{ base: 12, lg: 8 }}>
+                <Grid templateColumns="repeat(12, 1fr)" gap={6}>
+                  <GridItem colSpan={{ base: 12, md: 6 }}>
+                    <FormFieldInput
+                      label="Habilitación municipal"
+                      type="file"
+                      inputProps={{ padding: 2 }}
+                      onChange={(e) => {
+                        const input = e.target as HTMLInputElement;
+                        const file = input.files?.[0] ?? null;
+                        setForm((s) => ({ ...s, municipalPermit: file }));
+                      }}
+                    />
+                  </GridItem>
+
+                  <GridItem colSpan={{ base: 12, md: 6 }}>
+                    <FormFieldInput
+                      label="Plano aprobado"
+                      type="file"
+                      inputProps={{ padding: 2 }}
+                      onChange={(e) => {
+                        const input = e.target as HTMLInputElement;
+                        const file = input.files?.[0] ?? null;
+                        setForm((s) => ({ ...s, approvedPlan: file }));
+                      }}
+                    />
+                  </GridItem>
+
+                  <GridItem colSpan={{ base: 12, md: 6 }}>
+                    <FormFieldInput
+                      label="Protocolo de atención"
+                      type="file"
+                      inputProps={{ padding: 2 }}
+                      onChange={(e) => {
+                        const input = e.target as HTMLInputElement;
+                        const file = input.files?.[0] ?? null;
+                        setForm((s) => ({ ...s, otherDocs: file }));
+                      }}
+                    />
+                  </GridItem>
+
+                  <GridItem colSpan={{ base: 12, md: 6 }}>
+                    <FormFieldInput
+                      label="Otros documentos"
+                      type="file"
+                      inputProps={{ padding: 2 }}
+                      onChange={(e) => {
+                        const input = e.target as HTMLInputElement;
+                        const file = input.files?.[0] ?? null;
+                        setForm((s) => ({ ...s, protocolFile: file }));
+                      }}
+                    />
+                  </GridItem>
                 </Grid>
               </GridItem>
             </Grid>
