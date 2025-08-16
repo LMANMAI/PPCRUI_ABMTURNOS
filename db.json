@@ -102,5 +102,43 @@
       "status": "ACTIVA"
     }
    ]
+  },
+  "requests": {
+    "totalPages": 5,
+    "pageNumber": 1,
+    "pageSize": 10,
+    "totalResults": 42,
+    "data": [
+    {
+      "id": 9001,
+      "centerName": "Centro de Salud Ituzaingó Oeste",
+      "address": "Av. Ratti 2150",
+      "zone": "Oeste",
+      "specialties": "Clínica, Pediatría",
+      "requestedBy": "maria.gomez@salud.gob",
+      "requestedAt": "2025-08-01",
+      "status": "PENDIENTE"
+    },
+    {
+      "id": 9002,
+      "centerName": "Hospital Norte - Anexo",
+      "address": "Calle Güemes 1440",
+      "zone": "Norte",
+      "specialties": "Clínica, Odontología",
+      "requestedBy": "soporte@municipio.gob",
+      "requestedAt": "2025-07-30",
+      "status": "PENDIENTE"
+    },
+    {
+      "id": 9003,
+      "centerName": "Clínica Sur II",
+      "address": "Av. Mitre 2335",
+      "zone": "Sur",
+      "specialties": "Cardiología",
+      "requestedBy": "admin@salud.gob",
+      "requestedAt": "2025-07-29",
+      "status": "PENDIENTE"
+    }
+  ]
   }
 }

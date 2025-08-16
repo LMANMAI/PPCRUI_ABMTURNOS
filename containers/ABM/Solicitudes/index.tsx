@@ -1,13 +1,13 @@
 import { Stack } from "@chakra-ui/react";
-import { Table, TopbarCoponent } from "../../../../components";
-import React, { useState, useEffect } from "react";
+import { TopbarCoponent, Table } from "../../../components";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
-import { campaignColumns } from "../statics";
-import useFetch from "../../../../hooks/useFetch";
-import { ABM_LOCAL } from "../../../../config/constanst";
-import { renderRowMenu } from "../../../../helpers/renderRowMenu";
+import { requestsColumns } from "./statics";
+import useFetch from "../../../hooks/useFetch";
+import { ABM_LOCAL } from "../../../config/constanst";
+import { renderRowMenu } from "../../../helpers/renderRowMenu";
 
-const AdministrarCampañasVacunacionScreen = () => {
+const SolicitudesScreen = () => {
   let navigate = useNavigate();
 
   const [loading, setLoading] = useState<boolean>(false);
@@ -20,35 +20,40 @@ const AdministrarCampañasVacunacionScreen = () => {
     totalResults: "",
   });
 
-  const formatDate = (iso: string | Date) => {
-    const d = typeof iso === "string" ? new Date(iso) : iso;
-    const dd = String(d.getDate()).padStart(2, "0");
-    const mm = String(d.getMonth() + 1).padStart(2, "0");
-    const yyyy = d.getFullYear();
-    return `${dd}/${mm}/${yyyy}`;
-  };
-
   const {
     data: campaignsData,
     isLoading,
     error: errorMessage,
-  } = useFetch<any>(ABM_LOCAL.GET_CURRENT_CAMPAING, {
+  } = useFetch<any>(ABM_LOCAL.GET_PENDING_REQUEST, {
     useInitialFetch: true,
   });
 
   useEffect(() => {
     if (campaignsData && campaignsData.data) {
+      console.log(campaignsData.data);
       setDataToTable(
         campaignsData.data.map((c) => ({
           id: c.id,
-          name: c.name,
-          startDate: formatDate(c.startDate),
-          endDate: formatDate(c.endDate),
-          status: c.status,
+          ...c,
           menu: renderRowMenu(c.id, [
-            { label: "Ver", action: () => {} },
+            {
+              label: "Ver solicitud",
+              action: (id) => navigate(`/abm-salud/solicitudes/${id}`),
+              // icon: <FiEye />,
+            },
             { type: "separator" },
-            { label: "Editar", action: () => {} },
+            {
+              label: "Aprobar",
+              action: (id) => console.log("aprobar", id),
+              // icon: <FiCheck />,
+            },
+            {
+              label: "Rechazar",
+              action: (id) => console.log("rechazar", id),
+              // icon: <FiX />,
+              danger: true,
+              confirmMessage: "¿Rechazar la solicitud?",
+            },
           ]),
         }))
       );
@@ -62,33 +67,22 @@ const AdministrarCampañasVacunacionScreen = () => {
   }, [campaignsData]);
 
   return (
-    <Stack px={6} gap={6}>
+    <Stack gap={6} px={6}>
       <TopbarCoponent
-        title={{ name: "Gestión de campañas de vacunacíon" }}
+        title={{ name: "Administrar solicitudes pendientes" }}
         breadcrumb={[
           { text: "Inicio", onClick: () => navigate("/") },
           { text: "ABM Centros", onClick: () => navigate("/abm-salud") },
           {
-            text: "Administrar campañas",
-            onClick: () => {
-              navigate("/abm-salud/campañas");
-            },
-          },
-        ]}
-        buttonList={[
-          {
-            text: "Crear campaña de vacunación",
-            onClick: () => navigate("/abm-salud/campañas/crear-campaña"),
-            variant: "solid",
-            colorScheme: "teal",
+            text: "Administrar solicitudes pendientes",
+            onClick: () => navigate("/abm-salud"),
           },
         ]}
       />
-
       <Stack>
         <Table
           data={dataToTable}
-          columns={campaignColumns}
+          columns={requestsColumns}
           rowKey="id"
           onRowClick={() => {}}
           loading={loading}
@@ -109,4 +103,4 @@ const AdministrarCampañasVacunacionScreen = () => {
   );
 };
 
-export default AdministrarCampañasVacunacionScreen;
+export default SolicitudesScreen;

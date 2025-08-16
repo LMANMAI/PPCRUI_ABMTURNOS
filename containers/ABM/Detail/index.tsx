@@ -1,57 +1,53 @@
-// src/pages/DetailPage.tsx
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router";
 import { Stack, SimpleGrid, Heading, Button } from "@chakra-ui/react";
 import { TopbarCoponent } from "../../../components";
 import { Card } from "@chakra-ui/react";
+import useFetch from "../../../hooks/useFetch";
+import { ABM_LOCAL } from "../../../config/constanst";
+import { LoadingOrError, NotFoundCenter } from "../../../containers";
 
 export default function DetailPage() {
   const { id } = useParams<{ id: string }>();
+  const centerId = Number(id);
   const navigate = useNavigate();
+  const [centerData, setCenterData] = useState<any | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const rawData = [
+  const { data: centersData, error: errorMessage } = useFetch<any>(
+    ABM_LOCAL.GET_HEALTH_CENTERS,
     {
-      id: 1,
-      name: "Centro de Salud N°1",
-      address: "Av. Rivadavia 1200",
-      zone: "Centro",
-      specialties: "General, Pediatría",
-      status: "ACTIVO",
-    },
-    {
-      id: 2,
-      name: "Hospital Sur",
-      address: "Av. Mitre 2335",
-      zone: "Sur",
-      specialties: "General, Cardiología",
-      status: "INACTIVO",
-    },
-    {
-      id: 3,
-      name: "Clínica Norte",
-      address: "Calle Belgrano 4035",
-      zone: "Norte",
-      specialties: "General, Odontología",
-      status: "ACTIVO",
-    },
-    {
-      id: 4,
-      name: "Hospital Municipal",
-      address: "Ruta 12 km 3",
-      zone: "Este",
-      specialties: "General",
-      status: "ACTIVO",
-    },
-  ];
+      useInitialFetch: true,
+    }
+  );
 
-  const centroId = Number(id);
-  const centro = rawData.find((c) => c.id === centroId);
+  useEffect(() => {
+    setIsLoading(true);
+    if (!centersData?.data || Number.isNaN(centerId)) return;
+    const centro = centersData.data.find((c: any) => c.id === centerId);
+    setTimeout(() => {
+      setIsLoading(false);
+      setCenterData(centro ?? null);
+    }, 3000);
+  }, [centersData, centerId]);
 
-  if (!centro) {
+  const loadOrError = (
+    <LoadingOrError
+      isLoading={isLoading}
+      error={errorMessage}
+      onRetry={() => {}}
+    />
+  );
+  if (isLoading || errorMessage) return loadOrError;
+
+  if (!centerData) {
     return (
-      <Heading mt={10} textAlign="center">
-        Centro no encontrado
-      </Heading>
+      <NotFoundCenter
+        id={id}
+        onBack={() => navigate(-1)}
+        onRetry={() => {}}
+        onGoList={() => navigate("/abm-salud")}
+      />
     );
   }
 
@@ -59,38 +55,40 @@ export default function DetailPage() {
     {
       label: "Ver personal",
       desc: "Consultá el listado completo de profesionales asignados al centro, incluyendo roles y horarios.",
-      onClick: () => navigate(`/abm-salud/detail/${centroId}/personal`),
+      onClick: () => navigate(`/abm-salud/detail/${centerData.id}/personal`),
     },
     {
       label: "Especialidades",
       desc: "Visualizá y gestioná las especialidades médicas habilitadas en este centro.",
-      onClick: () => navigate(`/abm-salud/detail/${centroId}/especialidades`),
+      onClick: () =>
+        navigate(`/abm-salud/detail/${centerData.id}/especialidades`),
     },
     {
       label: "Horarios de atención",
       desc: "Revisá y modificá los días y horarios de atención del centro, tanto generales como por especialidad.",
-      onClick: () => navigate(`/abm-salud/detail/${centroId}/horarios`),
+      onClick: () => navigate(`/abm-salud/detail/${centerData.id}/horarios`),
     },
     {
       label: "Documentación del centro",
       desc: "Accedé a archivos y datos asociados al centro: habilitaciones, protocolos, y otra información relevante.",
-      onClick: () => navigate(`/abm-salud/detail/${centroId}/documentacion`),
+      onClick: () =>
+        navigate(`/abm-salud/detail/${centerData.id}/documentacion`),
     },
   ];
 
   return (
     <Stack px={6}>
       <TopbarCoponent
-        title={{ name: centro.name }}
+        title={{ name: centerData.name }}
         breadcrumb={[
           { text: "Inicio", onClick: () => navigate("/") },
           { text: "ABM Centros", onClick: () => navigate("/abm-salud") },
-          { text: centro.name, onClick: () => {} },
+          { text: centerData.name, onClick: () => {} },
         ]}
         buttonList={[
           {
             text: "Editar centro",
-            onClick: () => navigate(`/abm-salud/${centroId}/editar`),
+            onClick: () => navigate(`/abm-salud/${centerData.id}/editar`),
             variant: "solid",
             colorScheme: "teal",
           },

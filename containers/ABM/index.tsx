@@ -120,6 +120,20 @@ const ABMPage = () => {
           { text: "Inicio", onClick: () => navigate("/") },
           { text: "ABM Centros", onClick: () => navigate("/abm-salud") },
         ]}
+        menuOptions={[
+          {
+            label: "Solicitudes pendientes",
+            onClick: () => {
+              navigate("/abm-salud/solicitudes-pendientes");
+            },
+          },
+          {
+            label: "Agregar personal",
+            onClick: () => {
+              //navigate("/abm-salud/solicitudes-pendientes");
+            },
+          },
+        ]}
         buttonList={[
           {
             text: "Crear centro de salud",
