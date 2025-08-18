@@ -1,0 +1,144 @@
+{
+  "centros": {
+    "totalPages": 5,
+    "pageNumber": 1,
+    "pageSize": 10,
+    "totalResults": 42,
+    "data": [
+    {
+      "id": 1,
+      "name": "Centro de Salud N°1",
+      "address": "Av. Rivadavia 1200",
+      "zone": "Centro",
+      "specialties": "General, Pediatría",
+      "status": "ACTIVO"
+    },
+    {
+      "id": 2,
+      "name": "Hospital Sur",
+      "address": "Av. Mitre 2335",
+      "zone": "Sur",
+      "specialties": "General, Cardiología",
+      "status": "INACTIVO"
+    },
+    {
+      "id": 3,
+      "name": "Clínica Norte",
+      "address": "Calle Belgrano 4035",
+      "zone": "Norte",
+      "specialties": "General, Odontología",
+      "status": "ACTIVO"
+    },
+    {
+      "id": 4,
+      "name": "Hospital Municipal",
+      "address": "Ruta 12 km 3",
+      "zone": "Este",
+      "specialties": "General",
+      "status": "ACTIVO"
+    }
+  ]
+  },
+  "campaigns": {
+     "totalPages": 5,
+    "pageNumber": 1,
+    "pageSize": 10,
+    "totalResults": 42,
+   "data" : [
+     {
+      "id": 101,
+      "name": "Campaña Antigripal 2025 - Adultos",
+      "startDate": "2025-05-01",
+      "endDate": "2025-08-31",
+      "status": "ACTIVA"
+    },
+    {
+      "id": 102,
+      "name": "Sarampión y Rubéola Escolar",
+      "startDate": "2025-03-15",
+      "endDate": "2025-04-30",
+      "status": "FINALIZADA"
+    },
+    {
+      "id": 103,
+      "name": "Hepatitis B - Jóvenes",
+      "startDate": "2025-09-01",
+      "endDate": "2025-10-15",
+      "status": "BORRADOR"
+    },
+    {
+      "id": 104,
+      "name": "COVID-19 Refuerzo Otoño",
+      "startDate": "2025-04-01",
+      "endDate": "2025-06-15",
+      "status": "FINALIZADA"
+    },
+    {
+      "id": 105,
+      "name": "Neumococo Mayores de 65",
+      "startDate": "2025-07-01",
+      "endDate": "2025-12-31",
+      "status": "ACTIVA"
+    },
+    {
+      "id": 106,
+      "name": "Calendario Escolar - Triple Viral",
+      "startDate": "2025-02-10",
+      "endDate": "2025-03-30",
+      "status": "FINALIZADA"
+    },
+    {
+      "id": 107,
+      "name": "HPV Adolescentes",
+      "startDate": "2025-08-05",
+      "endDate": "2025-09-30",
+      "status": "PAUSADA"
+    },
+    {
+      "id": 108,
+      "name": "Fiebre Amarilla Viajeros",
+      "startDate": "2025-01-15",
+      "endDate": "2025-12-15",
+      "status": "ACTIVA"
+    }
+   ]
+  },
+  "requests": {
+    "totalPages": 5,
+    "pageNumber": 1,
+    "pageSize": 10,
+    "totalResults": 42,
+    "data": [
+    {
+      "id": 9001,
+      "centerName": "Centro de Salud Ituzaingó Oeste",
+      "address": "Av. Ratti 2150",
+      "zone": "Oeste",
+      "specialties": "Clínica, Pediatría",
+      "requestedBy": "maria.gomez@salud.gob",
+      "requestedAt": "2025-08-01",
+      "status": "PENDIENTE"
+    },
+    {
+      "id": 9002,
+      "centerName": "Hospital Norte - Anexo",
+      "address": "Calle Güemes 1440",
+      "zone": "Norte",
+      "specialties": "Clínica, Odontología",
+      "requestedBy": "soporte@municipio.gob",
+      "requestedAt": "2025-07-30",
+      "status": "PENDIENTE"
+    },
+    {
+      "id": 9003,
+      "centerName": "Clínica Sur II",
+      "address": "Av. Mitre 2335",
+      "zone": "Sur",
+      "specialties": "Cardiología",
+      "requestedBy": "admin@salud.gob",
+      "requestedAt": "2025-07-29",
+      "status": "PENDIENTE"
+    }
+  ]
+  }
+}
