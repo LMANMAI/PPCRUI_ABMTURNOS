@@ -84,10 +84,10 @@ const ABMPage = () => {
 
   useEffect(() => {
     setLoading(true);
-    if (centersData && centersData.data) {
+    if (centersData) {
       setLoading(false);
       setDataToTable(
-        centersData.data.map((item) => ({
+        centersData.map((item) => ({
           ...item,
           menu: renderRowMenu(item.id, [
             {
