@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   TopbarCoponent,
   FormFieldInput,
@@ -15,10 +15,23 @@ import {
   Separator,
 } from "@chakra-ui/react";
 import { ModuleBox } from "../../../components/ModuleBox";
+import SuccessFeedback from "../../Feedback/SuccessFeedback";
 import { diasOptions, horas24Options, zonasOptions } from "./statics";
+import useFetch from "../../../hooks/useFetch";
+import { ABM_LOCAL } from "../../../config/constanst";
+
+type CreateRequestResponse = {
+  id: number;
+  status: "PENDING" | "APPROVED" | "REJECTED";
+  createdAt?: string;
+};
 
 const AltaPage = () => {
   let navigate = useNavigate();
+  const [feedback, setFeedback] = React.useState<CreateRequestResponse | null>(
+    null
+  );
+
   const [step, setStep] = React.useState(1);
   const [form, setForm] = React.useState({
     name: "",
@@ -43,6 +56,58 @@ const AltaPage = () => {
     protocolFile: null as File | null,
     otherDocs: null as File | null,
   });
+
+  const {
+    data: createCenterResponse,
+    makeRequest: createCenter,
+    isLoading,
+    error: errorMessage,
+  } = useFetch<CreateRequestResponse | null>(ABM_LOCAL.CREATE_CENTER, {
+    useInitialFetch: false,
+    method: "post",
+    data: {
+      name: form.name,
+      address: form.address,
+      zone: form.zone,
+      capacity: 6,
+      latitude: Number(form.lat),
+      longitude: Number(form.lng),
+      description: form.description,
+      phone: form.phone,
+      email: form.email,
+      startDay: "MON",
+      endDay: "MON",
+      openTime: form.hourStart,
+      closeTime: form.hourEnd,
+      respFullName: form.respName,
+      respPhone: form.respPhone,
+      respLicense: form.respMatricula,
+    },
+  });
+
+  useEffect(() => {
+    if (!createCenterResponse) return;
+    if (typeof createCenterResponse !== "object") return;
+    if (!("id" in createCenterResponse)) return;
+    // if (createCenterResponse.id) {
+    console.log(createCenterResponse, "createCenterResponse");
+    setFeedback(createCenterResponse);
+    // }
+  }, [createCenterResponse]);
+
+  if (feedback) {
+    return (
+      <SuccessFeedback
+        message="Tu solicitud quedó pendiente de aprobación. Te avisaremos cuando sea revisada."
+        status={feedback.status}
+        idValue={feedback.id}
+        primaryText="Volver al inicio"
+        onPrimary={() => navigate("/")}
+        secondaryText="Ver solicitudes"
+        onSecondary={() => navigate("/requests")}
+      />
+    );
+  }
 
   return (
     <Stack px={6}>
@@ -70,7 +135,11 @@ const AltaPage = () => {
             ) : (
               <Button
                 colorPalette="teal"
-                onClick={() => console.log("Enviar", form)}
+                onClick={() => {
+                  console.log("Enviar", form);
+
+                  createCenter();
+                }}
               >
                 Crear centro
               </Button>
@@ -152,9 +221,9 @@ const AltaPage = () => {
                       required
                       label="Latitud"
                       placeholder="Ej: -34.123456"
-                      value={form.address}
+                      value={form.lat}
                       onChange={(e) =>
-                        setForm((s) => ({ ...s, address: e.target.value }))
+                        setForm((s) => ({ ...s, lat: e.target.value }))
                       }
                     />
                   </GridItem>
@@ -164,9 +233,9 @@ const AltaPage = () => {
                       required
                       label="Longitud"
                       placeholder="Ej: -58.123456"
-                      value={form.address}
+                      value={form.lng}
                       onChange={(e) =>
-                        setForm((s) => ({ ...s, address: e.target.value }))
+                        setForm((s) => ({ ...s, lng: e.target.value }))
                       }
                     />
                   </GridItem>

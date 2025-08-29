@@ -19,12 +19,12 @@ export interface SolicitudCentroRow {
 }
 
 export const requestsColumns: Column<any>[] = [
-  { header: "Centro solicitado", accessor: "centerName", textAlign: "left" },
+  { header: "Centro solicitado", accessor: "name", textAlign: "left" },
   { header: "Dirección", accessor: "address", textAlign: "left" },
   { header: "Zona", accessor: "zone", textAlign: "left" },
   { header: "Especialidades", accessor: "specialties", textAlign: "left" },
-  { header: "Solicitado por", accessor: "requestedBy", textAlign: "left" },
-  { header: "Fecha de solicitud", accessor: "requestedAt", textAlign: "left" },
+  { header: "Solicitado por", accessor: "createdBy", textAlign: "left" },
+  { header: "Fecha de solicitud", accessor: "createdAt", textAlign: "left" },
   { header: "Estado", accessor: "status", textAlign: "center" },
   { header: "", accessor: "menu", textAlign: "center" }, // menú
 ];

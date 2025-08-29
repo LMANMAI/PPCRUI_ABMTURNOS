@@ -1,9 +1,9 @@
-const PREFIX = {
-  BASE: `https://ppcrui.duckdns.org/api/v1`,
-};
+const API_BASE =
+  import.meta.env.VITE_API_BASE || "http://localhost:3000/api/v1";
 
 export const ABM_LOCAL = {
-  GET_HEALTH_CENTERS: `${PREFIX.BASE}/centros-salud`,
-  GET_CURRENT_CAMPAING: `${PREFIX.BASE}/campaigns`,
-  GET_PENDING_REQUEST: `${PREFIX.BASE}/requests`,
+  GET_HEALTH_CENTERS: `${API_BASE}/centros-salud`,
+  GET_CURRENT_CAMPAING: `${API_BASE}/campaigns`,
+  CREATE_CENTER: `${API_BASE}/centros-salud`,
+  GET_PENDING_REQUEST: `${API_BASE}/centros-salud/solicitudes`,
 };

@@ -1,4 +1,4 @@
-import { Stack } from "@chakra-ui/react";
+import { Button, CloseButton, Dialog, Portal, Stack } from "@chakra-ui/react";
 import { TopbarCoponent, Table } from "../../../components";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
@@ -6,6 +6,7 @@ import { requestsColumns } from "./statics";
 import useFetch from "../../../hooks/useFetch";
 import { ABM_LOCAL } from "../../../config/constanst";
 import { renderRowMenu } from "../../../helpers/renderRowMenu";
+import { Toaster, toaster } from "../../../components/ui/toaster";
 
 const SolicitudesScreen = () => {
   let navigate = useNavigate();
@@ -19,55 +20,133 @@ const SolicitudesScreen = () => {
     pageSize: "",
     totalResults: "",
   });
+  const [action, setAction] = useState<"approve" | "reject" | null>(null);
+  const [isRejectOpen, setIsRejectOpen] = useState(false);
+
+  const [currentId, setcurrentId] = useState<number | null>(null);
 
   const {
     data: campaignsData,
     isLoading,
     error: errorMessage,
-  } = useFetch<any>(ABM_LOCAL.GET_PENDING_REQUEST, {
-    useInitialFetch: true,
+    makeRequest: getPendingRequest,
+  } = useFetch<any>(`${ABM_LOCAL.GET_PENDING_REQUEST}?status=PENDING`, {
+    useInitialFetch: false,
+    method: "get",
   });
 
   useEffect(() => {
-    if (campaignsData && campaignsData.data) {
-      console.log(campaignsData.data);
-      setDataToTable(
-        campaignsData.data.map((c) => ({
-          id: c.id,
-          ...c,
-          menu: renderRowMenu(c.id, [
-            {
-              label: "Ver solicitud",
-              action: (id) => navigate(`/abm-salud/solicitudes/${id}`),
-              // icon: <FiEye />,
-            },
-            { type: "separator" },
-            {
-              label: "Aprobar",
-              action: (id) => console.log("aprobar", id),
-              // icon: <FiCheck />,
-            },
-            {
-              label: "Rechazar",
-              action: (id) => console.log("rechazar", id),
-              // icon: <FiX />,
-              danger: true,
-              confirmMessage: "¿Rechazar la solicitud?",
-            },
-          ]),
-        }))
-      );
-      setPagination({
-        totalPages: campaignsData.totalPages,
-        pageNumber: campaignsData.pageNumber,
-        pageSize: campaignsData.pageSize,
-        totalResults: campaignsData.totalResults,
+    getPendingRequest();
+  }, []);
+
+  //aprobar
+  const { data: centerApprove, makeRequest: approveCenter } = useFetch<any>(
+    `${ABM_LOCAL.GET_PENDING_REQUEST}/${currentId}/approve`,
+    {
+      useInitialFetch: false,
+      method: "post",
+    }
+  );
+
+  useEffect(() => {
+    if (!centerApprove) return;
+    if (centerApprove.id && centerApprove.status === "APPROVED") {
+      getPendingRequest();
+      toaster.create({
+        description: "Se aprobo el alta del centro.",
+        type: "info",
+        closable: true,
       });
     }
+  }, [centerApprove]);
+
+  //rechazar
+  const {
+    data: rejectResponse,
+    makeRequest: rejectCenter,
+    isLoading: isRejecting,
+  } = useFetch<any>(`${ABM_LOCAL.GET_PENDING_REQUEST}/${currentId}/reject`, {
+    useInitialFetch: false,
+    method: "post",
+  });
+
+  useEffect(() => {
+    if (!rejectResponse) return;
+    if (rejectResponse.id && rejectResponse.status === "APPROVED") {
+      getPendingRequest();
+      toaster.create({
+        description: "Se rechazo el alta del centro.",
+        type: "info",
+        closable: true,
+      });
+    }
+  }, [rejectResponse]);
+
+  useEffect(() => {
+    if (!currentId || !action) return;
+    if (action === "approve") approveCenter();
+    if (action === "reject") rejectCenter();
+  }, [currentId, action]);
+
+  const fmtDate = (iso?: string) =>
+    iso ? new Date(iso).toLocaleDateString("es-AR") : "—";
+
+  const toRow = (r: any) => ({
+    id: r.id,
+    name: r.payload?.name ?? "—",
+    address: r.payload?.address ?? "—",
+    zone: r.payload?.zone ?? "—",
+    specialties: r.payload?.specialties?.length
+      ? r.payload.specialties.join(", ")
+      : "—",
+    createdBy: r.createdBy ?? "—",
+    createdAt: fmtDate(r.createdAt),
+    status: r.status === "PENDING" && "Pendiente",
+    menu: renderRowMenu(r.id, [
+      {
+        label: "Ver solicitud",
+        action: (id) => navigate(`/abm-salud/solicitudes/${id}`),
+      },
+      { type: "separator" },
+      {
+        label: "Aprobar",
+        action: (id) => {
+          console.log("aprobar", id);
+          setcurrentId(id);
+          setAction("approve");
+        },
+      },
+      {
+        label: "Rechazar",
+        action: (id) => {
+          setAction("reject");
+          setIsRejectOpen(true);
+        },
+        danger: true,
+      },
+    ]),
+  });
+
+  useEffect(() => {
+    if (!campaignsData) return;
+    const list = Array.isArray(campaignsData)
+      ? campaignsData
+      : campaignsData.data ?? [];
+
+    setDataToTable(list.map(toRow));
+
+    const meta = Array.isArray(campaignsData) ? null : campaignsData;
+    setPagination({
+      pageNumber: meta?.pageNumber ?? 1,
+      pageSize: meta?.pageSize ?? list.length,
+      totalResults: meta?.totalResults ?? list.length,
+      totalPages: meta?.totalPages ?? 1,
+    });
   }, [campaignsData]);
 
   return (
     <Stack gap={6} px={6}>
+      <Toaster />
       <TopbarCoponent
         title={{ name: "Administrar solicitudes pendientes" }}
         breadcrumb={[
@@ -99,6 +178,49 @@ const SolicitudesScreen = () => {
           }}
         />
       </Stack>
+
+      <Dialog.Root
+        open={isRejectOpen}
+        onOpenChange={(e) => setIsRejectOpen(e.open)}
+        placement={"center"}
+      >
+        <Portal>
+          <Dialog.Backdrop />
+          <Dialog.Positioner>
+            <Dialog.Content>
+              <Dialog.Header>Rechazar solicitud</Dialog.Header>
+              <Dialog.Body>
+                Esta acción marcará la solicitud como RECHAZADA. ¿Querés
+                continuar?
+              </Dialog.Body>
+              <Dialog.Footer>
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    setIsRejectOpen(false);
+                    setAction(null);
+                  }}
+                  disabled={isRejecting}
+                >
+                  Cancelar
+                </Button>
+                <Button
+                  colorPalette="red"
+                  onClick={() => {
+                    setIsRejectOpen(false);
+                    rejectCenter();
+                    setAction(null);
+                  }}
+                  loading={isRejecting}
+                >
+                  Rechazar
+                </Button>
+              </Dialog.Footer>
+              <Dialog.CloseTrigger />
+            </Dialog.Content>
+          </Dialog.Positioner>
+        </Portal>
+      </Dialog.Root>
     </Stack>
   );
 };

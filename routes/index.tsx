@@ -7,13 +7,14 @@ import {
   AltaPage,
   EspecialidadesPage,
   HorariosPage,
-  PersonalPage,
+  PersonalAltaPage,
   DocumentacionPage,
   CrearCampaniaScreen,
   ProgramaSanitarioScreen,
   AdministrarCampañasVacunacionScreen,
   AdministrarProgramaSanitarioScreen,
   SolicitudesScreen,
+  PersonalPage,
 } from "../containers";
 import { SideMenuLayout } from "../components";
 import DetailPage from "../containers/ABM/Detail";
@@ -43,6 +44,10 @@ const index = () => {
         {
           path: "abm-salud/crear",
           element: <AltaPage />,
+        },
+        {
+          path: "abm-salud/personal",
+          element: <PersonalAltaPage />,
         },
         {
           path: "abm-salud/campañas",

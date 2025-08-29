@@ -97,7 +97,7 @@ const ABMPage = () => {
             },
           ]),
           status: (
-            <Badge colorPalette={item.status === "ACTIVO" ? "green" : "red"}>
+            <Badge colorPalette={item.status === "ACTIVE" ? "green" : "red"}>
               {item.status}
             </Badge>
           ),
@@ -130,7 +130,7 @@ const ABMPage = () => {
           {
             label: "Agregar personal",
             onClick: () => {
-              //navigate("/abm-salud/solicitudes-pendientes");
+              navigate("/abm-salud/personal");
             },
           },
         ]}
