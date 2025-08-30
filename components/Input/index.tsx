@@ -20,6 +20,7 @@ type FormFieldInputProps = {
     React.ComponentProps<typeof Textarea>,
     "value" | "onChange" | "placeholder"
   >;
+  isDisabled?: boolean;
 };
 
 const FormFieldInput = ({
@@ -33,6 +34,7 @@ const FormFieldInput = ({
   name,
   inputProps,
   textareaProps,
+  isDisabled = false,
 }: FormFieldInputProps) => {
   return (
     <Field.Root required={required}>
@@ -45,6 +47,7 @@ const FormFieldInput = ({
           onChange={onChange}
           {...textareaProps}
           resize="none"
+          disabled={isDisabled}
         />
       ) : (
         <Input
@@ -53,6 +56,7 @@ const FormFieldInput = ({
           placeholder={placeholder}
           value={value as string | number | undefined}
           onChange={onChange}
+          disabled={isDisabled}
           {...inputProps}
         />
       )}

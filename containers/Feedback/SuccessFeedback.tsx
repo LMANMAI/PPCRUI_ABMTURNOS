@@ -1,5 +1,3 @@
-// containers/Feedback/SuccessFeedback.tsx
-import React from "react";
 import {
   Box,
   Card,
@@ -19,22 +17,15 @@ import { FiCheckCircle } from "react-icons/fi";
 type RequestStatus = "PENDING" | "APPROVED" | "REJECTED" | "APPLIED";
 
 type SuccessFeedbackProps = {
-  /** Mensaje principal (ej: “Tu solicitud quedó pendiente de aprobación.”) */
   message: string;
-  /** Título opcional */
   title?: string;
-  /** Mostrar etiqueta de estado (opcional) */
   status?: RequestStatus;
-  /** Muestra un ID (opcional) */
   idLabel?: string;
   idValue?: string | number;
-  /** Acción primaria */
   primaryText?: string;
   onPrimary?: () => void;
-  /** Acción secundaria (opcional) */
   secondaryText?: string;
   onSecondary?: () => void;
-  /** Si querés que ocupe ancho contenido en vez de full container */
   compact?: boolean;
 };
 

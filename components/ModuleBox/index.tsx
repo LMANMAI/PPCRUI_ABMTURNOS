@@ -16,16 +16,14 @@ export function ModuleBox({ header, children, footer }: ModuleBoxProps) {
       p={6}
       minH="300px"
       maxH={"70vh"}
-      //minH="60dvh"
       overflowY="auto"
+      display={"flex"}
+      flexDir={"column"}
     >
-      {/* HEADER */}
       <Box mb={6}>{header}</Box>
-
-      {/* CONTENT */}
-      <Box mb={6}>{children}</Box>
-
-      {/* FOOTER */}
+      <Box mb={6} flex={1} overflow={"auto"}>
+        {children}
+      </Box>
       <Box mt={6} textAlign="right">
         {footer}
       </Box>

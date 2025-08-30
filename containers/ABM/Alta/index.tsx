@@ -3,6 +3,8 @@ import {
   TopbarCoponent,
   FormFieldInput,
   FormFieldSelect,
+  ModuleBox,
+  AddressAutocomplete,
 } from "../../../components";
 import { useNavigate } from "react-router";
 import {
@@ -14,7 +16,6 @@ import {
   Text,
   Separator,
 } from "@chakra-ui/react";
-import { ModuleBox } from "../../../components/ModuleBox";
 import SuccessFeedback from "../../Feedback/SuccessFeedback";
 import { diasOptions, horas24Options, zonasOptions } from "./statics";
 import useFetch from "../../../hooks/useFetch";
@@ -31,6 +32,9 @@ const AltaPage = () => {
   const [feedback, setFeedback] = React.useState<CreateRequestResponse | null>(
     null
   );
+
+  const [geocoding, setGeocoding] = React.useState(false);
+  const [geoError, setGeoError] = React.useState<string | null>(null);
 
   const [step, setStep] = React.useState(1);
   const [form, setForm] = React.useState({
@@ -69,7 +73,7 @@ const AltaPage = () => {
       name: form.name,
       address: form.address,
       zone: form.zone,
-      capacity: 6,
+      capacity: form.capacity ? Number(form.capacity) : null,
       latitude: Number(form.lat),
       longitude: Number(form.lng),
       description: form.description,
@@ -90,10 +94,57 @@ const AltaPage = () => {
     if (typeof createCenterResponse !== "object") return;
     if (!("id" in createCenterResponse)) return;
     // if (createCenterResponse.id) {
-    console.log(createCenterResponse, "createCenterResponse");
+
     setFeedback(createCenterResponse);
     // }
   }, [createCenterResponse]);
+
+  const CITY_CONTEXT = "Ituzaingó, Buenos Aires, Argentina";
+
+  const geocodeAddress = async (addr: string) => {
+    if (!addr || addr.trim().length < 5) {
+      setForm((s) => ({ ...s, lat: "", lng: "" }));
+      return;
+    }
+    setGeocoding(true);
+    setGeoError(null);
+    try {
+      const url = `https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&q=${encodeURIComponent(
+        `${addr}, ${CITY_CONTEXT}`
+      )}&email=contacto@ituzaingo.gob.ar`;
+
+      const res = await fetch(url);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const data = await res.json();
+      const first = data?.[0];
+
+      if (first?.lat && first?.lon) {
+        setForm((s) => ({
+          ...s,
+          lat: String(first.lat),
+          lng: String(first.lon),
+        }));
+      } else {
+        setForm((s) => ({ ...s, lat: "", lng: "" }));
+        setGeoError("No se encontraron coordenadas para esa dirección.");
+      }
+    } catch (e) {
+      setGeoError("Error geocodificando la dirección.");
+    } finally {
+      setGeocoding(false);
+    }
+  };
+
+  const canContinue =
+    form.name.trim() &&
+    form.zone &&
+    form.capacity &&
+    form.address.trim() &&
+    form.lat &&
+    form.lng;
+
+  const canSubmit =
+    form.respName.trim() && form.respPhone.trim() && form.respMatricula.trim();
 
   if (feedback) {
     return (
@@ -102,9 +153,9 @@ const AltaPage = () => {
         status={feedback.status}
         idValue={feedback.id}
         primaryText="Volver al inicio"
-        onPrimary={() => navigate("/")}
+        onPrimary={() => navigate("/abm-salud")}
         secondaryText="Ver solicitudes"
-        onSecondary={() => navigate("/requests")}
+        onSecondary={() => navigate("/abm-salud/solicitudes-pendientes")}
       />
     );
   }
@@ -129,17 +180,20 @@ const AltaPage = () => {
         footer={
           <Stack flexDirection={"row"}>
             {step === 1 ? (
-              <Button colorPalette="teal" onClick={() => setStep(2)}>
+              <Button
+                colorPalette="teal"
+                onClick={() => setStep(2)}
+                disabled={!canContinue}
+              >
                 Continuar
               </Button>
             ) : (
               <Button
                 colorPalette="teal"
                 onClick={() => {
-                  console.log("Enviar", form);
-
                   createCenter();
                 }}
+                disabled={!canContinue && !canSubmit}
               >
                 Crear centro
               </Button>
@@ -204,38 +258,18 @@ const AltaPage = () => {
                     />
                   </GridItem>
 
-                  <GridItem colSpan={{ base: 4 }}>
-                    <FormFieldInput
+                  <GridItem colSpan={{ base: 12 }}>
+                    <AddressAutocomplete
                       required
-                      label="Dirección"
-                      placeholder="Ej: Av. Rivadavia 1200"
                       value={form.address}
-                      onChange={(e) =>
-                        setForm((s) => ({ ...s, address: e.target.value }))
-                      }
-                    />
-                  </GridItem>
-
-                  <GridItem colSpan={{ base: 4, md: 4 }}>
-                    <FormFieldInput
-                      required
-                      label="Latitud"
-                      placeholder="Ej: -34.123456"
-                      value={form.lat}
-                      onChange={(e) =>
-                        setForm((s) => ({ ...s, lat: e.target.value }))
-                      }
-                    />
-                  </GridItem>
-
-                  <GridItem colSpan={{ base: 4, md: 4 }}>
-                    <FormFieldInput
-                      required
-                      label="Longitud"
-                      placeholder="Ej: -58.123456"
-                      value={form.lng}
-                      onChange={(e) =>
-                        setForm((s) => ({ ...s, lng: e.target.value }))
+                      onChange={(v) => setForm((s) => ({ ...s, address: v }))}
+                      onSelect={(sug) =>
+                        setForm((prev) => ({
+                          ...prev,
+                          address: sug.label,
+                          lat: sug.lat,
+                          lng: sug.lon,
+                        }))
                       }
                     />
                   </GridItem>
@@ -367,7 +401,6 @@ const AltaPage = () => {
 
         {step === 2 && (
           <>
-            {/* DATOS DEL RESPONSABLE MÉDICO */}
             <Grid templateColumns="repeat(12, 1fr)" gap={6} mt={10}>
               <GridItem colSpan={{ base: 12, lg: 4 }}>
                 <Heading size="md">Datos del responsable médico</Heading>
@@ -421,7 +454,6 @@ const AltaPage = () => {
               </GridItem>
             </Grid>
 
-            {/* DOCUMENTACIÓN REQUERIDA */}
             <Grid templateColumns="repeat(12, 1fr)" gap={6} mt={10}>
               <GridItem colSpan={{ base: 12, lg: 4 }}>
                 <Heading size="md">Documentación requerida</Heading>
