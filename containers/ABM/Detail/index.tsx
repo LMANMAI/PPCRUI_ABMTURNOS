@@ -14,8 +14,8 @@ export default function DetailPage() {
   const [centerData, setCenterData] = useState<any | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const { data: centersData, error: errorMessage } = useFetch<any>(
-    ABM_LOCAL.GET_HEALTH_CENTERS,
+  const { data: centersDataResponse, error: errorMessage } = useFetch<any>(
+    `${ABM_LOCAL.GET_HEALTH_CENTERS}/${id}`,
     {
       useInitialFetch: true,
     }
@@ -23,13 +23,11 @@ export default function DetailPage() {
 
   useEffect(() => {
     setIsLoading(true);
-    if (!centersData?.data || Number.isNaN(centerId)) return;
-    const centro = centersData.data.find((c: any) => c.id === centerId);
-    setTimeout(() => {
-      setIsLoading(false);
-      setCenterData(centro ?? null);
-    }, 3000);
-  }, [centersData, centerId]);
+    if (!centersDataResponse || Number.isNaN(centerId)) return;
+    setIsLoading(false);
+    console.log(centersDataResponse);
+    setCenterData(centersDataResponse ?? null);
+  }, [centersDataResponse]);
 
   const loadOrError = (
     <LoadingOrError

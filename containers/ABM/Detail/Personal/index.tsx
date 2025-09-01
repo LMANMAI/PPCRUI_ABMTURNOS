@@ -195,7 +195,7 @@ export default function PersonalPage() {
           data={data}
           rowKey="id"
           size="md"
-          variant="simple"
+          variant="line"
         />
       </Box>
     </Stack>

@@ -73,7 +73,6 @@ const ABMPage = () => {
   });
 
   //consulto al ep los centro de salud
-
   const {
     data: centersData,
     isLoading,
@@ -232,7 +231,7 @@ const ABMPage = () => {
           clientPaginate={false}
           pagination={{
             page,
-            pageSize: pagination.pageSize || 10,
+            pageSize: pagination.pageSize || 5,
             total: pagination.totalResults || 0,
             onPageChange: (p) => {
               setPage(p);
