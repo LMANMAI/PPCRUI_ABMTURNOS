@@ -72,7 +72,7 @@ const SolicitudesScreen = () => {
 
   useEffect(() => {
     if (!rejectResponse) return;
-    if (rejectResponse.id && rejectResponse.status === "APPROVED") {
+    if (rejectResponse.id && rejectResponse.status === "REJECTED") {
       getPendingRequest();
       toaster.create({
         description: "Se rechazo el alta del centro.",
@@ -111,7 +111,6 @@ const SolicitudesScreen = () => {
       {
         label: "Aprobar",
         action: (id) => {
-          console.log("aprobar", id);
           setcurrentId(id);
           setAction("approve");
         },
@@ -119,6 +118,8 @@ const SolicitudesScreen = () => {
       {
         label: "Rechazar",
         action: (id) => {
+          console.log(id, "desde aca");
+          setcurrentId(id);
           setAction("reject");
           setIsRejectOpen(true);
         },
@@ -167,15 +168,7 @@ const SolicitudesScreen = () => {
           loading={loading}
           loadingText="Obteniendo el listado de las sucursales"
           variant="outline"
-          clientPaginate={false}
-          pagination={{
-            page,
-            pageSize: pagination.pageSize || 10,
-            total: pagination.totalResults || 0,
-            onPageChange: (p) => {
-              setPage(p);
-            },
-          }}
+          dataSize={5}
         />
       </Stack>
 

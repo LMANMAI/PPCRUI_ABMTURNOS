@@ -228,15 +228,15 @@ const ABMPage = () => {
           loading={loading}
           loadingText="Obteniendo el listado de las sucursales"
           variant="outline"
-          clientPaginate={false}
-          pagination={{
-            page,
-            pageSize: pagination.pageSize || 5,
-            total: pagination.totalResults || 0,
-            onPageChange: (p) => {
-              setPage(p);
-            },
-          }}
+          dataSize={5}
+          //paginacion
+          // customPagination={{
+          //   enabled: true,
+          //   page,
+          //   pageSize,
+          //   totalItems,
+          //   onPageChange: (p) => setPage(p),
+          // }}
         />
       </Stack>
       {/* Pasar este drawer a un componente */}

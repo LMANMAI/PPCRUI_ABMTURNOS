@@ -1,16 +1,12 @@
 import {
   Box,
-  Card,
   Container,
   Stack,
   Heading,
   Text,
   Button,
   HStack,
-  Code,
   Icon,
-  Tag,
-  Separator,
 } from "@chakra-ui/react";
 import { FiCheckCircle } from "react-icons/fi";
 
@@ -29,88 +25,42 @@ type SuccessFeedbackProps = {
   compact?: boolean;
 };
 
-const StatusTag = ({ status }: { status: RequestStatus }) => {
-  const color =
-    status === "PENDING"
-      ? "yellow"
-      : status === "APPROVED"
-      ? "green"
-      : status === "REJECTED"
-      ? "red"
-      : "blue";
-  const label =
-    status === "PENDING"
-      ? "Pendiente"
-      : status === "APPROVED"
-      ? "Aprobada"
-      : status === "REJECTED"
-      ? "Rechazada"
-      : "Aplicada";
-
-  return (
-    <Tag.Root colorPalette={color} size="md" variant="subtle">
-      <Tag.Label>{label}</Tag.Label>
-    </Tag.Root>
-  );
-};
-
 export default function SuccessFeedback({
   message,
   title = "¡Solicitud enviada!",
-  status,
-  idLabel,
-  idValue,
-  primaryText = "Aceptar",
+  primaryText = "Volver al inicio",
   onPrimary,
   secondaryText,
   onSecondary,
   compact = false,
 }: SuccessFeedbackProps) {
   const Content = (
-    <Card.Root>
-      <Card.Header>
-        <HStack align="center" gap={3}>
-          <Icon as={FiCheckCircle} boxSize={8} color="green.500" />
-          <Heading size="lg">{title}</Heading>
-        </HStack>
-        <Stack gap={2} mt={2}>
-          <Text>{message}</Text>
-          {status && <StatusTag status={status} />}
-        </Stack>
-      </Card.Header>
+    <Stack align="center" gap={4} textAlign="center">
+      <Icon as={FiCheckCircle} boxSize={10} color="green.500" />
+      <Heading size="lg">{title}</Heading>
 
-      <Card.Body>
-        <Stack gap={4}>
-          {idValue != null && (
-            <Stack gap={1}>
-              <Text color="fg.muted" fontWeight="medium">
-                {idLabel || "ID de solicitud"}
-              </Text>
-              <Code fontSize="md" px={2} py={1} borderRadius="md">
-                {idValue}
-              </Code>
-            </Stack>
-          )}
+      <Text maxW="xl">{message}</Text>
 
-          <Separator />
-
-          <HStack gap={3}>
-            <Button onClick={onPrimary}>{primaryText}</Button>
-            {secondaryText && onSecondary && (
-              <Button variant="outline" onClick={onSecondary}>
-                {secondaryText}
-              </Button>
-            )}
-          </HStack>
-        </Stack>
-      </Card.Body>
-    </Card.Root>
+      <HStack gap={3} justify="center">
+        <Button colorPalette={"teal"} onClick={onPrimary}>
+          {primaryText}
+        </Button>
+        {secondaryText && onSecondary && (
+          <Button variant="outline" onClick={onSecondary}>
+            {secondaryText}
+          </Button>
+        )}
+      </HStack>
+    </Stack>
   );
 
   if (compact) return <Box>{Content}</Box>;
+
   return (
-    <Container maxW="2xl" py={12}>
-      {Content}
+    <Container maxW="3xl" px={4}>
+      <Stack minH="calc(100dvh - 70px)" align="center" justify="center">
+        {Content}
+      </Stack>
     </Container>
   );
 }

@@ -9,15 +9,7 @@ const Navbar: React.FC = () => {
     return colorPalette[index];
   };
 
-  const menuItems = [
-    { label: "gadbgcssucsupervisor" },
-    { label: "gadbgcsboconfiguradorstock" },
-    { label: "gadbgcsbosupervisorprecios" },
-    { label: "gadbgcssucoperador" },
-    { label: "gadbgcsboconfiguradorprecios" },
-    { label: "gadbgcsbosupervisorstock" },
-    { label: "Salir", isDanger: true },
-  ];
+  const menuItems = [{ label: "Salir", isDanger: true }];
 
   return (
     <Flex
