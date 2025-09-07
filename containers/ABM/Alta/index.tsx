@@ -99,42 +99,6 @@ const AltaPage = () => {
     // }
   }, [createCenterResponse]);
 
-  const CITY_CONTEXT = "Ituzaingó, Buenos Aires, Argentina";
-
-  const geocodeAddress = async (addr: string) => {
-    if (!addr || addr.trim().length < 5) {
-      setForm((s) => ({ ...s, lat: "", lng: "" }));
-      return;
-    }
-    setGeocoding(true);
-    setGeoError(null);
-    try {
-      const url = `https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&q=${encodeURIComponent(
-        `${addr}, ${CITY_CONTEXT}`
-      )}&email=contacto@ituzaingo.gob.ar`;
-
-      const res = await fetch(url);
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const data = await res.json();
-      const first = data?.[0];
-
-      if (first?.lat && first?.lon) {
-        setForm((s) => ({
-          ...s,
-          lat: String(first.lat),
-          lng: String(first.lon),
-        }));
-      } else {
-        setForm((s) => ({ ...s, lat: "", lng: "" }));
-        setGeoError("No se encontraron coordenadas para esa dirección.");
-      }
-    } catch (e) {
-      setGeoError("Error geocodificando la dirección.");
-    } finally {
-      setGeocoding(false);
-    }
-  };
-
   const canContinue =
     form.name.trim() &&
     form.zone &&

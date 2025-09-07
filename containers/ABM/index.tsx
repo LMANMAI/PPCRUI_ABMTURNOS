@@ -21,7 +21,7 @@ import { useNavigate } from "react-router";
 import { Table } from "../../components/Table";
 import { FiMoreVertical } from "react-icons/fi";
 import { RiEqualizerFill } from "react-icons/ri";
-import { ABM_LOCAL } from "../../config/constanst";
+import { ABM_LOCAL, AUTH } from "../../config/constanst";
 import {
   Centro,
   columns,

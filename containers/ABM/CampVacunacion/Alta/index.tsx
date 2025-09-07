@@ -41,7 +41,7 @@ const CrearCampaniaScreen = () => {
     data: centersData,
     isLoading,
     error: errorMessage,
-  } = useFetch<any>(ABM_LOCAL.GET_HEALTH_CENTERS, {
+  } = useFetch<any>(AUTH.GET_HEALTH_CENTERS, {
     useInitialFetch: true,
   });
 

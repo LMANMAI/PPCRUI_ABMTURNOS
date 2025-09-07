@@ -15,7 +15,7 @@ export default function DetailPage() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const { data: centersDataResponse, error: errorMessage } = useFetch<any>(
-    `${ABM_LOCAL.GET_HEALTH_CENTERS}/${id}`,
+    `${AUTH.GET_HEALTH_CENTERS}/${id}`,
     {
       useInitialFetch: true,
     }

@@ -1,7 +1,15 @@
 import React from "react";
 import { Avatar, Stack, Text, Flex, Menu, Portal, Box } from "@chakra-ui/react";
+import { useNavigate } from "react-router";
+import { useDispatch, useSelector } from "react-redux";
+import { logout, selectUser } from "../../features/authSlice";
 
 const Navbar: React.FC = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const userLogged = useSelector(selectUser);
+
   const colorPalette = ["red", "blue", "green", "yellow", "purple", "orange"];
 
   const pickPalette = (name: string) => {
@@ -9,7 +17,18 @@ const Navbar: React.FC = () => {
     return colorPalette[index];
   };
 
-  const menuItems = [{ label: "Salir", isDanger: true }];
+  const handleLogout = () => {
+    sessionStorage.removeItem("authToken");
+    localStorage.removeItem("authToken");
+    dispatch(logout());
+    navigate("/login", { replace: true });
+  };
+
+  const menuItems: Array<{
+    label: string;
+    isDanger?: boolean;
+    onClick?: () => void;
+  }> = [{ label: "Salir", isDanger: true, onClick: handleLogout }];
 
   return (
     <Flex
@@ -31,7 +50,7 @@ const Navbar: React.FC = () => {
               <Avatar.Fallback name="Usuario Apellido" />
             </Avatar.Root>
             <Text color="black" fontSize="sm">
-              Usuario Apellido
+              {userLogged.user.name}
             </Text>
           </Stack>
         </Menu.Trigger>
@@ -57,6 +76,7 @@ const Navbar: React.FC = () => {
                       _hover={{ bg: "gray.100" }}
                       fontWeight={item.isDanger ? "semibold" : "normal"}
                       color={item.isDanger ? "red.500" : "gray.800"}
+                      onClick={item.onClick}
                     >
                       {item.label}
                     </Box>

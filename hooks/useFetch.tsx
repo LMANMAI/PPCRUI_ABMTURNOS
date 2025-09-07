@@ -10,6 +10,12 @@ interface UseFetchOptions {
   params?: Record<string, any>;
   data?: any;
   body?: any;
+
+  //SESSION
+  auth?: boolean;
+  tokenProvider?: () => string | null;
+  unauthorizedHandler?: () => void;
+  withCredentials?: boolean;
 }
 
 interface UseFetchReturn<T> {
@@ -19,6 +25,23 @@ interface UseFetchReturn<T> {
   makeRequest: (
     requestOptions?: Partial<UseFetchOptions>
   ) => Promise<T | undefined>;
+}
+
+function defaultTokenProvider(): string | null {
+  return (
+    sessionStorage.getItem("authToken") ||
+    localStorage.getItem("authToken") ||
+    null
+  );
+}
+
+function defaultUnauthorizedHandler() {
+  try {
+    sessionStorage.removeItem("authToken");
+    localStorage.removeItem("authToken");
+  } catch {}
+  // redirijo sin mantener el historial
+  window.location.replace("/login");
 }
 
 export default function useFetch<T>(
@@ -37,13 +60,35 @@ export default function useFetch<T>(
       setIsLoading(true);
       setError(null);
 
-      const method = requestOptions?.method || options.method || "get";
+      const method: AllowedMethods =
+        requestOptions?.method || options.method || "get";
+
       const requestData = requestOptions?.data || options.data || options.body;
-      const requestHeaders = {
+
+      const authEnabled = requestOptions?.auth ?? options.auth ?? true;
+
+      const getToken =
+        requestOptions?.tokenProvider ||
+        options.tokenProvider ||
+        defaultTokenProvider;
+
+      const on401 =
+        requestOptions?.unauthorizedHandler ||
+        options.unauthorizedHandler ||
+        defaultUnauthorizedHandler;
+
+      // headers base
+      const requestHeaders: Record<string, string> = {
         "Content-Type": "application/json",
         ...(options.headers || {}),
         ...(requestOptions?.headers || {}),
       };
+
+      // Authorization si corresponde
+      if (authEnabled && !requestHeaders.Authorization) {
+        const token = getToken();
+        if (token) requestHeaders.Authorization = `${token}`;
+      }
 
       const axiosConfig: AxiosRequestConfig = {
         url,
@@ -51,6 +96,8 @@ export default function useFetch<T>(
         headers: requestHeaders,
         params: requestOptions?.params || options.params,
         data: requestData,
+        withCredentials:
+          requestOptions?.withCredentials ?? options.withCredentials,
       };
 
       try {
@@ -58,7 +105,11 @@ export default function useFetch<T>(
         setData(response.data);
         return response.data as T;
       } catch (err) {
-        const axiosError = err as AxiosError;
+        const axiosError = err as AxiosError<any>;
+        // Manejo explícito de 401 sin refresh
+        if (axiosError.response?.status === 401) {
+          on401();
+        }
         setError(axiosError.message || "Error inesperado");
         setData(undefined);
         return undefined;
@@ -73,7 +124,6 @@ export default function useFetch<T>(
     if (!cancelToken.current && options.useInitialFetch) {
       makeRequest();
     }
-
     return () => {
       cancelToken.current = true;
     };

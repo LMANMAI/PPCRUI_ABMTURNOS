@@ -42,7 +42,7 @@ const PersonalAltaPage = () => {
     centerId: "",
   });
 
-  const { data: centersData } = useFetch<any>(ABM_LOCAL.GET_HEALTH_CENTERS, {
+  const { data: centersData } = useFetch<any>(AUTH.GET_HEALTH_CENTERS, {
     useInitialFetch: true,
   });
 

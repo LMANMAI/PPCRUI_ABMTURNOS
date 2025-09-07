@@ -6,5 +6,9 @@ export const ABM_LOCAL = {
   GET_CURRENT_CAMPAING: `${API_BASE}/campaigns`,
   CREATE_CENTER: `${API_BASE}/centros-salud`,
   GET_PENDING_REQUEST: `${API_BASE}/centros-salud/solicitudes`,
+};
+
+export const AUTH = {
+  LOGIN_PERSONAL: `${API_BASE}/auth/login`,
   CREATE_PERSONAL: `${API_BASE}/auth/register`,
 };
