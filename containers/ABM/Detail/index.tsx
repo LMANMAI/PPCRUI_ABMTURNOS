@@ -15,7 +15,7 @@ export default function DetailPage() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const { data: centersDataResponse, error: errorMessage } = useFetch<any>(
-    `${AUTH.GET_HEALTH_CENTERS}/${id}`,
+    `${ABM_LOCAL.GET_HEALTH_CENTERS}/${id}`,
     {
       useInitialFetch: true,
     }
@@ -44,7 +44,7 @@ export default function DetailPage() {
         id={id}
         onBack={() => navigate(-1)}
         onRetry={() => {}}
-        onGoList={() => navigate("/abm-salud")}
+        onGoList={() => navigate("/administrar")}
       />
     );
   }
@@ -53,24 +53,24 @@ export default function DetailPage() {
     {
       label: "Ver personal",
       desc: "Consultá el listado completo de profesionales asignados al centro, incluyendo roles y horarios.",
-      onClick: () => navigate(`/abm-salud/detail/${centerData.id}/personal`),
+      onClick: () => navigate(`/administrar/detail/${centerData.id}/personal`),
     },
     {
       label: "Especialidades",
       desc: "Visualizá y gestioná las especialidades médicas habilitadas en este centro.",
       onClick: () =>
-        navigate(`/abm-salud/detail/${centerData.id}/especialidades`),
+        navigate(`/administrar/detail/${centerData.id}/especialidades`),
     },
     {
       label: "Horarios de atención",
       desc: "Revisá y modificá los días y horarios de atención del centro, tanto generales como por especialidad.",
-      onClick: () => navigate(`/abm-salud/detail/${centerData.id}/horarios`),
+      onClick: () => navigate(`/administrar/detail/${centerData.id}/horarios`),
     },
     {
       label: "Documentación del centro",
       desc: "Accedé a archivos y datos asociados al centro: habilitaciones, protocolos, y otra información relevante.",
       onClick: () =>
-        navigate(`/abm-salud/detail/${centerData.id}/documentacion`),
+        navigate(`/administrar/detail/${centerData.id}/documentacion`),
     },
   ];
 
@@ -80,13 +80,13 @@ export default function DetailPage() {
         title={{ name: centerData.name }}
         breadcrumb={[
           { text: "Inicio", onClick: () => navigate("/") },
-          { text: "ABM Centros", onClick: () => navigate("/abm-salud") },
+          { text: "ABM Centros", onClick: () => navigate("/administrar") },
           { text: centerData.name, onClick: () => {} },
         ]}
         buttonList={[
           {
             text: "Editar centro",
-            onClick: () => navigate(`/abm-salud/${centerData.id}/editar`),
+            onClick: () => navigate(`/administrar/${centerData.id}/editar`),
             variant: "solid",
             colorScheme: "teal",
           },

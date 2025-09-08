@@ -105,7 +105,7 @@ const SolicitudesScreen = () => {
     menu: renderRowMenu(r.id, [
       {
         label: "Ver solicitud",
-        action: (id) => navigate(`/abm-salud/solicitudes/${id}`),
+        action: (id) => navigate(`/administrar/solicitudes/${id}`),
       },
       { type: "separator" },
       {
@@ -152,10 +152,10 @@ const SolicitudesScreen = () => {
         title={{ name: "Administrar solicitudes pendientes" }}
         breadcrumb={[
           { text: "Inicio", onClick: () => navigate("/") },
-          { text: "ABM Centros", onClick: () => navigate("/abm-salud") },
+          { text: "ABM Centros", onClick: () => navigate("/administrar") },
           {
             text: "Administrar solicitudes pendientes",
-            onClick: () => navigate("/abm-salud"),
+            onClick: () => navigate("/administrar"),
           },
         ]}
       />

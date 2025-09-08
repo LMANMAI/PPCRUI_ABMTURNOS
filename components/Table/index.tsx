@@ -35,7 +35,7 @@ interface CustomTableProps<T> {
   variant?: "outline" | "line";
   loading?: boolean;
   loadingText?: string;
-
+  emptyStateText?: string;
   // NUEVO: paginación automática (default true) + tamaño de página
   pagination?: boolean; // default: true
   dataSize?: number; // usado solo en automático; default: 10
@@ -53,7 +53,7 @@ function CustomTable<T extends Record<string, any>>({
   variant = "outline",
   loading = false,
   loadingText = "Cargando...",
-
+  emptyStateText,
   // automático (por defecto)
   pagination = true,
   dataSize = 10,
@@ -175,7 +175,7 @@ function CustomTable<T extends Record<string, any>>({
             <Table.Row>
               <Table.Cell colSpan={columns.length} py={6}>
                 <Text fontSize="sm" color="gray.500" textAlign="center">
-                  Sin resultados
+                  {emptyStateText ? emptyStateText : "Sin resultados"}
                 </Text>
               </Table.Cell>
             </Table.Row>

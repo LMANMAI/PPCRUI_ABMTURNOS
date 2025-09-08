@@ -16,7 +16,7 @@ import {
 import { useNavigate } from "react-router";
 import { useEffect, useMemo, useState } from "react";
 import useFetch from "../../../hooks/useFetch";
-import { ABM_LOCAL } from "../../../config/constanst";
+import { ABM_LOCAL, AUTH } from "../../../config/constanst";
 import SuccessFeedback from "../../Feedback/SuccessFeedback";
 
 type CreateRequestResponse = {
@@ -42,7 +42,7 @@ const PersonalAltaPage = () => {
     centerId: "",
   });
 
-  const { data: centersData } = useFetch<any>(AUTH.GET_HEALTH_CENTERS, {
+  const { data: centersData } = useFetch<any>(ABM_LOCAL.GET_HEALTH_CENTERS, {
     useInitialFetch: true,
   });
 
@@ -57,7 +57,7 @@ const PersonalAltaPage = () => {
     makeRequest: createPersonal,
     isLoading,
     error: errorMessage,
-  } = useFetch<any | null>(ABM_LOCAL.CREATE_PERSONAL, {
+  } = useFetch<any | null>(AUTH.CREATE_PERSONAL, {
     useInitialFetch: false,
     method: "post",
     data: {
@@ -102,9 +102,9 @@ const PersonalAltaPage = () => {
         status={feedback.status}
         idValue={feedback?.id}
         primaryText="Volver al inicio"
-        onPrimary={() => navigate("/abm-salud")}
+        onPrimary={() => navigate("/administrar")}
         secondaryText="Ver solicitudes"
-        onSecondary={() => navigate("/abm-salud/solicitudes-pendientes")}
+        onSecondary={() => navigate("/administrar/solicitudes-pendientes")}
       />
     );
   }
@@ -115,10 +115,10 @@ const PersonalAltaPage = () => {
         title={{ name: "Agregar personal" }}
         breadcrumb={[
           { text: "Inicio", onClick: () => navigate("/") },
-          { text: "ABM Centros", onClick: () => navigate("/abm-salud") },
+          { text: "ABM Centros", onClick: () => navigate("/administrar") },
           {
             text: "Agregar personal",
-            onClick: () => navigate("/abm-salud/personal"),
+            onClick: () => navigate("/administrar/personal"),
           },
         ]}
       />

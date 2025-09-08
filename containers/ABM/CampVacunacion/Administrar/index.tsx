@@ -67,18 +67,18 @@ const AdministrarCampañasVacunacionScreen = () => {
         title={{ name: "Gestión de campañas de vacunacíon" }}
         breadcrumb={[
           { text: "Inicio", onClick: () => navigate("/") },
-          { text: "ABM Centros", onClick: () => navigate("/abm-salud") },
+          { text: "ABM Centros", onClick: () => navigate("/administrar") },
           {
             text: "Administrar campañas",
             onClick: () => {
-              navigate("/abm-salud/campañas");
+              navigate("/administrar/campañas");
             },
           },
         ]}
         buttonList={[
           {
             text: "Crear campaña de vacunación",
-            onClick: () => navigate("/abm-salud/campañas/crear-campaña"),
+            onClick: () => navigate("/administrar/campañas/crear-campaña"),
             variant: "solid",
             colorScheme: "teal",
           },

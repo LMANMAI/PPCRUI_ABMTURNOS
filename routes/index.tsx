@@ -15,6 +15,8 @@ import {
   AdministrarProgramaSanitarioScreen,
   SolicitudesScreen,
   PersonalPage,
+  RegistroPacientePage,
+  CrearTurnoPage,
 } from "../containers";
 import { SideMenuLayout } from "../components";
 import DetailPage from "../containers/ABM/Detail";
@@ -34,41 +36,55 @@ const router = createBrowserRouter([
         element: <SideMenuLayout />,
         children: [
           { index: true, element: <HomePage /> },
-          { path: "abm-salud", element: <ABMPage /> },
+          { path: "administrar", element: <ABMPage /> },
           {
-            path: "abm-salud/solicitudes-pendientes",
+            path: "administrar/solicitudes-pendientes",
             element: <SolicitudesScreen />,
           },
-          { path: "abm-salud/crear", element: <AltaPage /> },
-          { path: "abm-salud/personal", element: <PersonalAltaPage /> },
+          { path: "administrar/crear", element: <AltaPage /> },
+          { path: "administrar/personal", element: <PersonalAltaPage /> },
           {
-            path: "abm-salud/campañas",
+            path: "administrar/campañas",
             element: <AdministrarCampañasVacunacionScreen />,
           },
           {
-            path: "abm-salud/campañas/crear-campaña",
+            path: "administrar/campañas/crear-campaña",
             element: <CrearCampaniaScreen />,
           },
           {
-            path: "abm-salud/programas",
+            path: "administrar/programas",
             element: <AdministrarProgramaSanitarioScreen />,
           },
           {
-            path: "abm-salud/programas/crear-programa-sanitario",
+            path: "administrar/programas/crear-programa-sanitario",
             element: <ProgramaSanitarioScreen />,
           },
-          { path: "abm-salud/detail/:id", element: <DetailPage /> },
+          { path: "administrar/detail/:id", element: <DetailPage /> },
           {
-            path: "abm-salud/detail/:id/especialidades",
+            path: "administrar/detail/:id/especialidades",
             element: <EspecialidadesPage />,
           },
-          { path: "abm-salud/detail/:id/horarios", element: <HorariosPage /> },
-          { path: "abm-salud/detail/:id/personal", element: <PersonalPage /> },
           {
-            path: "abm-salud/detail/:id/documentacion",
+            path: "administrar/detail/:id/horarios",
+            element: <HorariosPage />,
+          },
+          {
+            path: "administrar/detail/:id/personal",
+            element: <PersonalPage />,
+          },
+          {
+            path: "administrar/detail/:id/documentacion",
             element: <DocumentacionPage />,
           },
-          { path: "disponibilidad", element: <CentroSaludPage /> },
+          { path: "sanatorio", element: <CentroSaludPage /> },
+          {
+            path: "sanatorio/agregar-paciente",
+            element: <RegistroPacientePage />,
+          },
+          {
+            path: "sanatorio/reservar-turno",
+            element: <CrearTurnoPage />,
+          },
         ],
       },
     ],

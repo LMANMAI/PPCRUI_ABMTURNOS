@@ -117,9 +117,9 @@ const AltaPage = () => {
         status={feedback.status}
         idValue={feedback.id}
         primaryText="Volver al inicio"
-        onPrimary={() => navigate("/abm-salud")}
+        onPrimary={() => navigate("/administrar")}
         secondaryText="Ver solicitudes"
-        onSecondary={() => navigate("/abm-salud/solicitudes-pendientes")}
+        onSecondary={() => navigate("/administrar/solicitudes-pendientes")}
       />
     );
   }
@@ -130,8 +130,11 @@ const AltaPage = () => {
         title={{ name: "Crear centro de salud" }}
         breadcrumb={[
           { text: "Inicio", onClick: () => navigate("/") },
-          { text: "ABM Centros", onClick: () => navigate("/abm-salud") },
-          { text: "Nuevo centro", onClick: () => navigate("/abm-salud/crear") },
+          { text: "ABM Centros", onClick: () => navigate("/administrar") },
+          {
+            text: "Nuevo centro",
+            onClick: () => navigate("/administrar/crear"),
+          },
         ]}
       />
 

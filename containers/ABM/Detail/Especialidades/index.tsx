@@ -99,7 +99,7 @@ export default function EspecialidadesPage() {
                   _hover={{ bg: "gray.100" }}
                   fontWeight={"normal"}
                   color={"gray.800"}
-                  onClick={() => navigate(`/abm-salud/detail/${id}`)}
+                  onClick={() => navigate(`/administrar/detail/${id}`)}
                 >
                   {"Opcion sobre la especialidad"}
                 </Box>
@@ -142,10 +142,10 @@ export default function EspecialidadesPage() {
         title={{ name: `Especialidades de ${centro.name}` }}
         breadcrumb={[
           { text: "Inicio", onClick: () => navigate("/") },
-          { text: "ABM Centros", onClick: () => navigate("/abm-salud") },
+          { text: "ABM Centros", onClick: () => navigate("/administrar") },
           {
             text: centro.name,
-            onClick: () => navigate(`/abm-salud/detail/${centroId}`),
+            onClick: () => navigate(`/administrar/detail/${centroId}`),
           },
           { text: "Especialidades", onClick: () => {} },
         ]}

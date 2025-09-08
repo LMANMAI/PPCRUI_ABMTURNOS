@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-// import { useUserAD } from "../../context/authContext";
 import { TopbarCoponent } from "../../components";
 import {
   Box,
@@ -19,9 +18,8 @@ import {
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router";
 import { Table } from "../../components/Table";
-import { FiMoreVertical } from "react-icons/fi";
 import { RiEqualizerFill } from "react-icons/ri";
-import { ABM_LOCAL, AUTH } from "../../config/constanst";
+import { ABM_LOCAL } from "../../config/constanst";
 import {
   Centro,
   columns,
@@ -91,7 +89,7 @@ const ABMPage = () => {
           menu: renderRowMenu(item.id, [
             {
               label: "Ver centro de salud",
-              action: (id) => navigate(`/abm-salud/detail/${id}`),
+              action: (id) => navigate(`/administrar/detail/${id}`),
               value: "ver-centro",
             },
           ]),
@@ -117,26 +115,26 @@ const ABMPage = () => {
         title={{ name: "Gestión de Centros de Salud" }}
         breadcrumb={[
           { text: "Inicio", onClick: () => navigate("/") },
-          { text: "ABM Centros", onClick: () => navigate("/abm-salud") },
+          { text: "ABM Centros", onClick: () => navigate("/administrar") },
         ]}
         menuOptions={[
           {
             label: "Solicitudes pendientes",
             onClick: () => {
-              navigate("/abm-salud/solicitudes-pendientes");
+              navigate("/administrar/solicitudes-pendientes");
             },
           },
           {
             label: "Agregar personal",
             onClick: () => {
-              navigate("/abm-salud/personal");
+              navigate("/administrar/personal");
             },
           },
         ]}
         buttonList={[
           {
             text: "Crear centro de salud",
-            onClick: () => navigate("/abm-salud/crear"),
+            onClick: () => navigate("/administrar/crear"),
             variant: "solid",
             colorScheme: "teal",
           },
@@ -165,7 +163,7 @@ const ABMPage = () => {
                 variant={"plain"}
                 color={"black"}
                 onClick={() => {
-                  navigate("/abm-salud/campañas");
+                  navigate("/administrar/campañas");
                 }}
               >
                 Crear campaña
@@ -197,7 +195,7 @@ const ABMPage = () => {
                 variant={"plain"}
                 color={"black"}
                 onClick={() => {
-                  navigate("/abm-salud/programas");
+                  navigate("/administrar/programas");
                 }}
               >
                 Nuevo programa

@@ -61,10 +61,10 @@ export default function DocumentacionPage() {
         title={{ name: `Documentacion de ${centro.name}` }}
         breadcrumb={[
           { text: "Inicio", onClick: () => navigate("/") },
-          { text: "ABM Centros", onClick: () => navigate("/abm-salud") },
+          { text: "ABM Centros", onClick: () => navigate("/administrar") },
           {
             text: centro.name,
-            onClick: () => navigate(`/abm-salud/detail/${centroId}`),
+            onClick: () => navigate(`/administrar/detail/${centroId}`),
           },
           { text: "Documentacion", onClick: () => {} },
         ]}

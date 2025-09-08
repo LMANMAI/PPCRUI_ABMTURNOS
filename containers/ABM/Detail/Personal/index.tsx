@@ -104,7 +104,7 @@ export default function PersonalPage() {
                   _hover={{ bg: "gray.100" }}
                   fontWeight={"normal"}
                   color={"gray.800"}
-                  onClick={() => navigate(`/abm-salud/detail/${id}`)}
+                  onClick={() => navigate(`/administrar/detail/${id}`)}
                 >
                   {"Opocion sobre el porfesional"}
                 </Box>
@@ -152,10 +152,10 @@ export default function PersonalPage() {
         title={{ name: `Personal del centro ${centroId}` }}
         breadcrumb={[
           { text: "Inicio", onClick: () => navigate("/") },
-          { text: "ABM Centros", onClick: () => navigate("/abm-salud") },
+          { text: "ABM Centros", onClick: () => navigate("/administrar") },
           {
             text: `Centro ${centroId}`,
-            onClick: () => navigate(`/abm-salud/detail/${centroId}`),
+            onClick: () => navigate(`/administrar/detail/${centroId}`),
           },
           { text: "Personal", onClick: () => {} },
         ]}

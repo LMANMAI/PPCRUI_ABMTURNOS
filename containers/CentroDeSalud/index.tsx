@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Badge,
   Box,
@@ -8,8 +8,6 @@ import {
   Menu,
   Portal,
   Stack,
-  Spinner,
-  Text,
 } from "@chakra-ui/react";
 import { RiEqualizerFill } from "react-icons/ri";
 import { FiMoreVertical } from "react-icons/fi";
@@ -21,37 +19,10 @@ type Turno = {
   id: number;
   paciente: string;
   dni: string;
-  hora: string; // p.e. "14:30"
+  hora: string;
   especialidad: string;
   estado: "CONFIRMADO" | "PENDIENTE" | "CANCELADO";
 };
-
-const mockTurnos: Turno[] = [
-  {
-    id: 1,
-    paciente: "Juan Pérez",
-    dni: "12.345.678",
-    hora: "09:00",
-    especialidad: "Cardiología",
-    estado: "CONFIRMADO",
-  },
-  {
-    id: 2,
-    paciente: "María González",
-    dni: "23.456.789",
-    hora: "10:30",
-    especialidad: "Pediatría",
-    estado: "PENDIENTE",
-  },
-  {
-    id: 3,
-    paciente: "Carlos Ramírez",
-    dni: "34.567.890",
-    hora: "11:15",
-    especialidad: "Traumatología",
-    estado: "CANCELADO",
-  },
-];
 
 export default function CentroSaludPage() {
   const { centroId } = useParams<{ centroId: string }>();
@@ -68,14 +39,6 @@ export default function CentroSaludPage() {
 
   const [turnos, setTurnos] = useState<Turno[]>([]);
   const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    setLoading(true);
-    setTimeout(() => {
-      setTurnos(mockTurnos);
-      setLoading(false);
-    }, 500);
-  }, []);
 
   const renderMenu = (id: number) => (
     <Menu.Root>
@@ -112,7 +75,7 @@ export default function CentroSaludPage() {
                   _hover={{ bg: "gray.100" }}
                   fontWeight={"normal"}
                   color={"gray.800"}
-                  onClick={() => navigate(`/abm-salud/detail/${id}`)}
+                  onClick={() => navigate(`/administrar/detail/${id}`)}
                 >
                   Ver detalle de turno
                 </Box>
@@ -123,7 +86,6 @@ export default function CentroSaludPage() {
       </Portal>
     </Menu.Root>
   );
-
   const tableData = turnos.map((t) => ({
     ...t,
     estadoBadge: (
@@ -142,6 +104,13 @@ export default function CentroSaludPage() {
     menu: renderMenu(t.id),
   }));
 
+  useEffect(() => {
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+    }, 1500);
+  }, []);
+
   return (
     <Stack gap={6} px={6} pt={4}>
       <TopbarCoponent
@@ -153,7 +122,14 @@ export default function CentroSaludPage() {
             onClick: () => navigate(`/centros/${centroId}`),
           },
         ]}
-        menuOptions={[{ label: "Registrar usuario", onClick: () => {} }]}
+        menuOptions={[
+          {
+            label: "Registrar usuario",
+            onClick: () => {
+              navigate(`/sanatorio/agregar-paciente`);
+            },
+          },
+        ]}
       />
 
       <Stack direction="row" gap={4}>
@@ -176,7 +152,9 @@ export default function CentroSaludPage() {
             <Card.Footer>
               <Button
                 variant="plain"
-                onClick={() => navigate("/abm-salud/crear-campaña")}
+                onClick={() => {
+                  // navigate("/administrar/crear-campaña");
+                }}
               >
                 Gestionar campaña
               </Button>
@@ -202,7 +180,7 @@ export default function CentroSaludPage() {
             <Card.Footer>
               <Button
                 variant="plain"
-                onClick={() => navigate("/abm-salud/crear-programa-sanitario")}
+                onClick={() => navigate("reservar-turno")}
               >
                 Nuevo programa
               </Button>
@@ -216,27 +194,25 @@ export default function CentroSaludPage() {
         <Stack alignItems="flex-end">
           <Button
             variant="outline"
-            // leftIcon={<RiEqualizerFill />}
             onClick={() => {
               /* abrir modal filtro */
             }}
           >
-            Filtrar
+            <RiEqualizerFill /> Filtrar
           </Button>
         </Stack>
 
-        {loading ? (
-          <Box textAlign="center" py={10}>
-            <Spinner size="lg" />
-          </Box>
-        ) : (
-          <Table
-            data={tableData}
-            columns={turnoColumns}
-            rowKey="id"
-            onRowClick={(row) => console.log("Clic en fila", row)}
-          />
-        )}
+        <Table
+          data={tableData}
+          columns={turnoColumns}
+          rowKey="id"
+          loading={loading}
+          onRowClick={(row) => console.log("Clic en fila", row)}
+          loadingText="Obteniendo el listado de los turnos del sanatorio"
+          emptyStateText="No se encontraron turnos para el dia de hoy"
+          variant="outline"
+          dataSize={5}
+        />
       </Stack>
     </Stack>
   );
