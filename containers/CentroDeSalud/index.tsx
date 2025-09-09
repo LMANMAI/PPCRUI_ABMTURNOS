@@ -129,6 +129,18 @@ export default function CentroSaludPage() {
               navigate(`/sanatorio/agregar-paciente`);
             },
           },
+          {
+            label: "Registrar personal",
+            onClick: () => {
+              navigate(`/sanatorio/agregar-paciente`);
+            },
+          },
+          {
+            label: "Gestionar agenda",
+            onClick: () => {
+              navigate(`/sanatorio/agregar-paciente`);
+            },
+          },
         ]}
       />
 
