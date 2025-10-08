@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Avatar,
   Box,
@@ -16,11 +16,13 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { FaRegEnvelope, FaLock, FaUser } from "react-icons/fa6";
-import { useUserAD } from "../../context/authContext";
 import { useNavigate } from "react-router";
 
 import { loginSuccess } from "../../features/authSlice";
 import { useDispatch } from "react-redux";
+import useFetch from "../../hooks/useFetch";
+import { AUTH } from "../../config/constanst";
+import { scheduleAutoLogout } from "./sessionManager";
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -32,22 +34,43 @@ const LoginPage = () => {
 
   const canSubmit = username.trim() !== "" && password.trim() !== "";
 
+  //Logeo al usuario
+  const {
+    data: userLoginResponse,
+    isLoading,
+    error: errorMessage,
+    makeRequest: handleLoginUser,
+  } = useFetch<any>(AUTH.LOGIN_PERSONAL, {
+    useInitialFetch: false,
+    method: "post",
+    data: {
+      identifier: username,
+      password: password,
+    },
+  });
+
   const handleLogin = () => {
+    if (!canSubmit || loading) return;
     setLoading(true);
-    const mockUser = {
-      username: username,
-      name: "USER PRUEBA",
-      groups: [""],
-      legajo: "l0000001",
-      account: {},
-      suc: [],
-    };
-    dispatch(loginSuccess(mockUser));
-    setTimeout(() => {
-      setLoading(false);
-      navigate("/");
-    }, 1200);
+    handleLoginUser();
   };
+
+  useEffect(() => {
+    if (!userLoginResponse) return;
+    if (userLoginResponse && userLoginResponse?.status === "LOGGED_IN") {
+      setLoading(false);
+      sessionStorage.setItem("authToken", userLoginResponse.accessToken);
+
+      dispatch(loginSuccess(userLoginResponse));
+      //programo el logout con el vencimiento del login
+      scheduleAutoLogout(userLoginResponse.accessTokenExpiresAt, () => {
+        navigate("/login", { replace: true });
+      });
+      navigate("/", { replace: true });
+
+      console.log(userLoginResponse);
+    }
+  }, [userLoginResponse]);
 
   return (
     <Flex height="100vh" width="100%">
@@ -87,6 +110,7 @@ const LoginPage = () => {
             <InputGroup startElement={<FaLock />}>
               <Input
                 placeholder="Contraseña"
+                type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />

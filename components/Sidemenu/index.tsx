@@ -6,7 +6,6 @@ import {
   NavBarComponent,
 } from "../index";
 import { Navigate, Outlet } from "react-router";
-import { useUserAD } from "../../context/authContext";
 import { useAppSelector } from "../../store";
 import { selectIsAuthenticated } from "../../features/authSlice";
 
@@ -21,7 +20,6 @@ const SideMenuLayout: React.FC<SideMenuLayoutProps> = ({ children }: any) => {
   return (
     <>
       <NavBarComponent />
-
       <Box
         height="100%"
         bg="#f1f1f1"

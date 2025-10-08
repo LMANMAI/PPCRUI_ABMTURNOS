@@ -41,7 +41,7 @@ const CrearCampaniaScreen = () => {
     data: centersData,
     isLoading,
     error: errorMessage,
-  } = useFetch<any>(ABM_LOCAL.GET_HEALTH_CENTERS, {
+  } = useFetch<any>(AUTH.GET_HEALTH_CENTERS, {
     useInitialFetch: true,
   });
 
@@ -71,7 +71,7 @@ const CrearCampaniaScreen = () => {
       endDate: form.endDate,
       centers: form.centers.map(Number),
     });
-    navigate("/abm-salud/campañas");
+    navigate("/administrar/campañas");
   };
 
   return (
@@ -80,17 +80,17 @@ const CrearCampaniaScreen = () => {
         title={{ name: "Crear campaña de vacunación" }}
         breadcrumb={[
           { text: "Inicio", onClick: () => navigate("/") },
-          { text: "ABM Centros", onClick: () => navigate("/abm-salud") },
+          { text: "ABM Centros", onClick: () => navigate("/administrar") },
           {
             text: "Administrar campañas",
             onClick: () => {
-              navigate("/abm-salud/campañas");
+              navigate("/administrar/campañas");
             },
           },
           {
             text: "Crear campaña de vacunación",
             onClick: () => {
-              navigate("/abm-salud/campañas//crear-campaña");
+              navigate("/administrar/campañas//crear-campaña");
             },
           },
         ]}

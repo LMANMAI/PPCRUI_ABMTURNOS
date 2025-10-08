@@ -3,12 +3,12 @@ import {
   Spinner,
   Text,
   VStack,
-  Skeleton,
-  Pagination,
   ButtonGroup,
   IconButton,
+  Pagination as ChakraPagination,
 } from "@chakra-ui/react";
 import { LuChevronLeft, LuChevronRight } from "react-icons/lu";
+import React from "react";
 
 // Types
 export interface Column<T> {
@@ -17,12 +17,14 @@ export interface Column<T> {
   textAlign?: "left" | "right" | "center";
 }
 
-interface PaginationProps {
+type CustomPaginationConfig = {
+  enabled: boolean; // Activa el modo custom
   page: number; // 1-based
-  pageSize: number;
-  total?: number; // total de ítems (requerido para server-side)
+  pageSize: number; // ítems por página
+  totalItems: number; // total de ítems
+  totalPages?: number; // opcional (si no lo pasás, se calcula)
   onPageChange: (page: number) => void;
-}
+};
 
 interface CustomTableProps<T> {
   data: T[];
@@ -33,8 +35,13 @@ interface CustomTableProps<T> {
   variant?: "outline" | "line";
   loading?: boolean;
   loadingText?: string;
-  clientPaginate?: boolean;
-  pagination?: PaginationProps;
+  emptyStateText?: string;
+  // NUEVO: paginación automática (default true) + tamaño de página
+  pagination?: boolean; // default: true
+  dataSize?: number; // usado solo en automático; default: 10
+
+  // NUEVO: paginación custom (server-side / control externo)
+  customPagination?: CustomPaginationConfig;
 }
 
 function CustomTable<T extends Record<string, any>>({
@@ -46,16 +53,93 @@ function CustomTable<T extends Record<string, any>>({
   variant = "outline",
   loading = false,
   loadingText = "Cargando...",
-  clientPaginate = true,
-  pagination,
+  emptyStateText,
+  // automático (por defecto)
+  pagination = true,
+  dataSize = 10,
+
+  // custom
+  customPagination,
 }: CustomTableProps<T>) {
-  const page = pagination?.page ?? 1;
-  const pageSize = pagination?.pageSize ?? (data.length || 10);
+  const isCustom = Boolean(customPagination?.enabled);
 
-  const totalItems = pagination?.total ?? data.length;
+  // --------- AUTOMÁTICO (client-side) -----------
+  const [autoPage, setAutoPage] = React.useState(1); // 1-based
 
-  const pageCount =
-    pageSize > 0 ? Math.max(1, Math.ceil(totalItems / pageSize)) : 1;
+  // Si cambia el data o dataSize, reseteo página si quedó fuera de rango
+  React.useEffect(() => {
+    if (!isCustom && pagination) {
+      const maxPage =
+        dataSize > 0 ? Math.max(1, Math.ceil(data.length / dataSize)) : 1;
+      if (autoPage > maxPage) setAutoPage(maxPage);
+    }
+  }, [data.length, dataSize, pagination, isCustom, autoPage]);
+
+  // Data a renderizar según modo
+  let renderData: T[] = data;
+  let page = 1;
+  let pageSize = data.length || 10;
+  let totalItems = data.length;
+  let pageCount = 1;
+
+  if (isCustom && customPagination) {
+    // --------- CUSTOM -----------
+    page = customPagination.page ?? 1;
+    pageSize = (customPagination.pageSize ?? data.length) || 10;
+    totalItems = customPagination.totalItems ?? data.length;
+    pageCount =
+      customPagination.totalPages ??
+      (pageSize > 0 ? Math.max(1, Math.ceil(totalItems / pageSize)) : 1);
+
+    // En custom NO se corta el array: asumimos que `data` ya viene con la página aplicada
+    renderData = data;
+  } else if (pagination) {
+    // --------- AUTOMÁTICO -----------
+    page = autoPage;
+    pageSize = dataSize > 0 ? dataSize : data.length || 10;
+    totalItems = data.length;
+    pageCount =
+      pageSize > 0 ? Math.max(1, Math.ceil(totalItems / pageSize)) : 1;
+
+    const start = (page - 1) * pageSize;
+    const end = start + pageSize;
+    renderData = data.slice(start, end);
+  } else {
+    // sin paginación
+    renderData = data;
+    page = 1;
+    pageSize = data.length || 10;
+    totalItems = data.length;
+    pageCount = 1;
+  }
+
+  const showPager = (isCustom && customPagination) || pagination;
+  const canShowControls =
+    showPager && pageSize > 0 && totalItems > pageSize && pageCount > 1;
+
+  const handlePrev = () => {
+    if (isCustom && customPagination) {
+      customPagination.onPageChange(Math.max(1, page - 1));
+    } else {
+      setAutoPage((p) => Math.max(1, p - 1));
+    }
+  };
+
+  const handleNext = () => {
+    if (isCustom && customPagination) {
+      customPagination.onPageChange(Math.min(pageCount, page + 1));
+    } else {
+      setAutoPage((p) => Math.min(pageCount, p + 1));
+    }
+  };
+
+  const handleGoTo = (p: number) => {
+    if (isCustom && customPagination) {
+      customPagination.onPageChange(p);
+    } else {
+      setAutoPage(p);
+    }
+  };
 
   return (
     <VStack align="stretch" gap={4} width="full">
@@ -63,7 +147,7 @@ function CustomTable<T extends Record<string, any>>({
         <Table.Header>
           {columns.map((col) => (
             <Table.ColumnHeader
-              key={String(col.accessor)}
+              key={String(col.accessor ?? col.header)}
               textAlign={col.textAlign}
               fontWeight="bold"
               fontSize="sm"
@@ -74,22 +158,29 @@ function CustomTable<T extends Record<string, any>>({
             </Table.ColumnHeader>
           ))}
         </Table.Header>
+
         <Table.Body>
           {loading ? (
-            <>
-              <Table.Row>
-                <Table.Cell colSpan={columns.length} py={8}>
-                  <VStack gap={3}>
-                    <Spinner size="lg" color={"teal"} />
-                    <Text fontSize="sm" color="gray.600">
-                      {loadingText}
-                    </Text>
-                  </VStack>
-                </Table.Cell>
-              </Table.Row>
-            </>
+            <Table.Row>
+              <Table.Cell colSpan={columns.length} py={8}>
+                <VStack gap={3}>
+                  <Spinner size="lg" color={"teal"} />
+                  <Text fontSize="sm" color="gray.600">
+                    {loadingText}
+                  </Text>
+                </VStack>
+              </Table.Cell>
+            </Table.Row>
+          ) : renderData.length === 0 ? (
+            <Table.Row>
+              <Table.Cell colSpan={columns.length} py={6}>
+                <Text fontSize="sm" color="gray.500" textAlign="center">
+                  {emptyStateText ? emptyStateText : "Sin resultados"}
+                </Text>
+              </Table.Cell>
+            </Table.Row>
           ) : (
-            data.map((row) => (
+            renderData.map((row) => (
               <Table.Row
                 key={String(row[rowKey])}
                 cursor={onRowClick ? "pointer" : undefined}
@@ -113,30 +204,35 @@ function CustomTable<T extends Record<string, any>>({
           )}
         </Table.Body>
       </Table.Root>
-      {pagination && pageSize > 0 && totalItems > pageSize && (
-        <Pagination.Root count={totalItems} pageSize={pageSize} page={page}>
+
+      {canShowControls && (
+        <ChakraPagination.Root
+          count={totalItems}
+          pageSize={pageSize}
+          page={page}
+        >
           <ButtonGroup
             variant="ghost"
             size="sm"
             wrap="wrap"
             justifyContent="center"
           >
-            <Pagination.PrevTrigger asChild>
+            <ChakraPagination.PrevTrigger asChild>
               <IconButton
                 aria-label="Anterior"
-                onClick={() => pagination.onPageChange(Math.max(1, page - 1))}
+                onClick={handlePrev}
                 disabled={page <= 1}
               >
                 <LuChevronLeft />
               </IconButton>
-            </Pagination.PrevTrigger>
+            </ChakraPagination.PrevTrigger>
 
-            <Pagination.Items
+            <ChakraPagination.Items
               render={(p) => (
                 <IconButton
                   key={p.value}
                   aria-label={`Página ${p.value}`}
-                  onClick={() => pagination.onPageChange(p.value)}
+                  onClick={() => handleGoTo(p.value)}
                   variant={{ base: "ghost", _selected: "outline" }}
                   data-selected={p.value === page ? "" : undefined}
                 >
@@ -145,21 +241,20 @@ function CustomTable<T extends Record<string, any>>({
               )}
             />
 
-            <Pagination.NextTrigger asChild>
+            <ChakraPagination.NextTrigger asChild>
               <IconButton
                 aria-label="Siguiente"
-                onClick={() =>
-                  pagination.onPageChange(Math.min(pageCount, page + 1))
-                }
+                onClick={handleNext}
                 disabled={page >= pageCount}
               >
                 <LuChevronRight />
               </IconButton>
-            </Pagination.NextTrigger>
+            </ChakraPagination.NextTrigger>
           </ButtonGroup>
-        </Pagination.Root>
+        </ChakraPagination.Root>
       )}
     </VStack>
   );
 }
+
 export { CustomTable as Table };

@@ -7,14 +7,14 @@ import authReducer, {
 } from "@/features/authSlice";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 
-const preloadedAuth = loadAuthState();
+const preloaded = loadAuthState();
 
 export const store = configureStore({
   reducer: {
     counter: counterReducer,
     auth: authReducer,
   },
-  preloadedState: preloadedAuth ? { auth: preloadedAuth } : undefined,
+  preloadedState: preloaded ? { auth: preloaded } : undefined,
 });
 store.subscribe(() => {
   const state = store.getState() as { auth: AuthState };

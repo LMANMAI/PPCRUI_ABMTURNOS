@@ -67,11 +67,11 @@ const AdministrarProgramaSanitarioScreen = () => {
         title={{ name: "Gestión de programas sanitarios" }}
         breadcrumb={[
           { text: "Inicio", onClick: () => navigate("/") },
-          { text: "ABM Centros", onClick: () => navigate("/abm-salud") },
+          { text: "ABM Centros", onClick: () => navigate("/administrar") },
           {
             text: "Administrar programas",
             onClick: () => {
-              navigate("/abm-salud/programas");
+              navigate("/administrar/programas");
             },
           },
         ]}
@@ -79,7 +79,7 @@ const AdministrarProgramaSanitarioScreen = () => {
           {
             text: "Crear programa sanitario",
             onClick: () =>
-              navigate("/abm-salud/programas/crear-programa-sanitario"),
+              navigate("/administrar/programas/crear-programa-sanitario"),
             variant: "solid",
             colorScheme: "teal",
           },

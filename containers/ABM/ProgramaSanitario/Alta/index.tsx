@@ -42,7 +42,7 @@ export default function ProgramaSanitarioScreen() {
   const handleSubmit = () => {
     console.log({ name, description, startDate, endDate, targets });
 
-    navigate("/abm-salud//programas");
+    navigate("/administrar//programas");
   };
 
   return (
@@ -51,11 +51,11 @@ export default function ProgramaSanitarioScreen() {
         title={{ name: "Crear programa sanitario" }}
         breadcrumb={[
           { text: "Inicio", onClick: () => navigate("/") },
-          { text: "ABM Centros", onClick: () => navigate("/abm-salud") },
+          { text: "ABM Centros", onClick: () => navigate("/administrar") },
           {
             text: "Administrar programas",
             onClick: () => {
-              navigate("/abm-salud/programas");
+              navigate("/administrar/programas");
             },
           },
           { text: "Programa sanitario", onClick: () => {} },

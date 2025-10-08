@@ -1,12 +1,29 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import type { RootState } from "../store";
 
 export interface IUser {
-  username: string;
+  ok: boolean;
+  status: string;
+  accessToken: string;
+  accessTokenExpiresIn: number;
+  accessTokenExpiresAt: string;
+  refreshToken: string;
+  refreshTokenExpiresIn: number;
+  refreshTokenExpiresAt: string;
+  user: UserContentType;
+}
+
+export interface UserContentType {
+  sub: string;
+  orgId: string;
+  email: string;
   name: string;
-  groups: string[];
-  legajo: string;
-  account: Record<string, unknown>;
-  suc: unknown[];
+  profile: string;
+  centerId: string;
+  roles: string[];
+  phone: string;
+  usuarioVerificado: boolean;
+  jti: string;
 }
 
 export interface AuthState {
@@ -39,8 +56,9 @@ const authSlice = createSlice({
 
 export const { loginSuccess, logout } = authSlice.actions;
 
-export const selectIsAuthenticated = (s: any) => s.auth.authenticated;
-export const selectUser = (s: any) => s.auth.user;
+export const selectIsAuthenticated = (state: RootState) =>
+  state.auth.authenticated;
+export const selectUser = (state: RootState) => state.auth.user;
 
 export default authSlice.reducer;
 
@@ -50,7 +68,6 @@ export const saveAuthState = (state: AuthState) => {
     localStorage.setItem(KEY, JSON.stringify(state));
   } catch {}
 };
-
 export const loadAuthState = (): AuthState | undefined => {
   try {
     const raw = localStorage.getItem(KEY);
@@ -60,7 +77,6 @@ export const loadAuthState = (): AuthState | undefined => {
     return undefined;
   }
 };
-
 export const clearAuthState = () => {
   try {
     localStorage.removeItem(KEY);

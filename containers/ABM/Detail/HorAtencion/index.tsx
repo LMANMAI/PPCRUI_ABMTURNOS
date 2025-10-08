@@ -88,10 +88,10 @@ export default function HorariosPage() {
         title={{ name: "Horarios de atención" }}
         breadcrumb={[
           { text: "Inicio", onClick: () => navigate("/") },
-          { text: "ABM Centros", onClick: () => navigate("/abm-salud") },
+          { text: "ABM Centros", onClick: () => navigate("/administrar") },
           {
             text: `Centro ${centroId}`,
-            onClick: () => navigate(`/abm-salud/detail/${centroId}`),
+            onClick: () => navigate(`/administrar/detail/${centroId}`),
           },
           { text: "Horarios", onClick: () => {} },
         ]}

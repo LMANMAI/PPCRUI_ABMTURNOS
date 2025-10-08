@@ -1,23 +1,17 @@
 import React from "react";
-import { useLocation, Outlet, Navigate } from "react-router";
+import { Outlet, Navigate } from "react-router";
 import { useAppSelector } from "../store";
 import { selectIsAuthenticated, selectUser } from "../features/authSlice";
 
-const ProtectedRoute = () => {
+const PublicOnlyRoute: React.FC = () => {
   const isAuthenticated = useAppSelector(selectIsAuthenticated);
   const user = useAppSelector(selectUser);
-
-  const location = useLocation();
 
   const expired = user
     ? new Date(user.accessTokenExpiresAt).getTime() <= Date.now()
     : true;
 
-  return isAuthenticated && !expired ? (
-    <Outlet />
-  ) : (
-    <Navigate to="/login" replace state={{ from: location }} />
-  );
+  return isAuthenticated && !expired ? <Navigate to="/" replace /> : <Outlet />;
 };
 
-export default ProtectedRoute;
+export default PublicOnlyRoute;

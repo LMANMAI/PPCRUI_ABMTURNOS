@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-// import { useUserAD } from "../../context/authContext";
 import { TopbarCoponent } from "../../components";
 import {
   Box,
@@ -19,7 +18,6 @@ import {
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router";
 import { Table } from "../../components/Table";
-import { FiMoreVertical } from "react-icons/fi";
 import { RiEqualizerFill } from "react-icons/ri";
 import { ABM_LOCAL } from "../../config/constanst";
 import {
@@ -73,7 +71,6 @@ const ABMPage = () => {
   });
 
   //consulto al ep los centro de salud
-
   const {
     data: centersData,
     isLoading,
@@ -84,20 +81,20 @@ const ABMPage = () => {
 
   useEffect(() => {
     setLoading(true);
-    if (centersData && centersData.data) {
+    if (centersData) {
       setLoading(false);
       setDataToTable(
-        centersData.data.map((item) => ({
+        centersData.map((item) => ({
           ...item,
           menu: renderRowMenu(item.id, [
             {
               label: "Ver centro de salud",
-              action: (id) => navigate(`/abm-salud/detail/${id}`),
+              action: (id) => navigate(`/administrar/detail/${id}`),
               value: "ver-centro",
             },
           ]),
           status: (
-            <Badge colorPalette={item.status === "ACTIVO" ? "green" : "red"}>
+            <Badge colorPalette={item.status === "ACTIVE" ? "green" : "red"}>
               {item.status}
             </Badge>
           ),
@@ -118,26 +115,26 @@ const ABMPage = () => {
         title={{ name: "Gestión de Centros de Salud" }}
         breadcrumb={[
           { text: "Inicio", onClick: () => navigate("/") },
-          { text: "ABM Centros", onClick: () => navigate("/abm-salud") },
+          { text: "ABM Centros", onClick: () => navigate("/administrar") },
         ]}
         menuOptions={[
           {
             label: "Solicitudes pendientes",
             onClick: () => {
-              navigate("/abm-salud/solicitudes-pendientes");
+              navigate("/administrar/solicitudes-pendientes");
             },
           },
           {
             label: "Agregar personal",
             onClick: () => {
-              //navigate("/abm-salud/solicitudes-pendientes");
+              navigate("/administrar/personal");
             },
           },
         ]}
         buttonList={[
           {
             text: "Crear centro de salud",
-            onClick: () => navigate("/abm-salud/crear"),
+            onClick: () => navigate("/administrar/crear"),
             variant: "solid",
             colorScheme: "teal",
           },
@@ -166,7 +163,7 @@ const ABMPage = () => {
                 variant={"plain"}
                 color={"black"}
                 onClick={() => {
-                  navigate("/abm-salud/campañas");
+                  navigate("/administrar/campañas");
                 }}
               >
                 Crear campaña
@@ -198,7 +195,7 @@ const ABMPage = () => {
                 variant={"plain"}
                 color={"black"}
                 onClick={() => {
-                  navigate("/abm-salud/programas");
+                  navigate("/administrar/programas");
                 }}
               >
                 Nuevo programa
@@ -229,15 +226,15 @@ const ABMPage = () => {
           loading={loading}
           loadingText="Obteniendo el listado de las sucursales"
           variant="outline"
-          clientPaginate={false}
-          pagination={{
-            page,
-            pageSize: pagination.pageSize || 10,
-            total: pagination.totalResults || 0,
-            onPageChange: (p) => {
-              setPage(p);
-            },
-          }}
+          dataSize={5}
+          //paginacion
+          // customPagination={{
+          //   enabled: true,
+          //   page,
+          //   pageSize,
+          //   totalItems,
+          //   onPageChange: (p) => setPage(p),
+          // }}
         />
       </Stack>
       {/* Pasar este drawer a un componente */}

@@ -16,7 +16,7 @@ export const columns: Column<Centro>[] = [
   { header: "Nombre del centro", accessor: "name", textAlign: "left" },
   { header: "Dirección", accessor: "address", textAlign: "left" },
   { header: "Zona", accessor: "zone", textAlign: "left" },
-  { header: "Especialidades", accessor: "specialties", textAlign: "left" },
+  //  { header: "Especialidades", accessor: "specialties", textAlign: "left" },
   { header: "Estado", accessor: "status", textAlign: "left" },
   { header: "", accessor: "menu", textAlign: "center" },
 ];

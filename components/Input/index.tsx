@@ -20,6 +20,10 @@ type FormFieldInputProps = {
     React.ComponentProps<typeof Textarea>,
     "value" | "onChange" | "placeholder"
   >;
+  isDisabled?: boolean;
+
+  helperOverlay?: boolean;
+  helperText?: React.ReactNode;
 };
 
 const FormFieldInput = ({
@@ -33,18 +37,23 @@ const FormFieldInput = ({
   name,
   inputProps,
   textareaProps,
+  isDisabled = false,
+  helperText,
+  helperOverlay,
 }: FormFieldInputProps) => {
   return (
     <Field.Root required={required}>
       <Field.Label>{label}</Field.Label>
+
       {textarea ? (
         <Textarea
           name={name}
           placeholder={placeholder}
           value={value as string | undefined}
           onChange={onChange}
-          {...textareaProps}
           resize="none"
+          disabled={isDisabled}
+          {...textareaProps}
         />
       ) : (
         <Input
@@ -53,10 +62,22 @@ const FormFieldInput = ({
           placeholder={placeholder}
           value={value as string | number | undefined}
           onChange={onChange}
+          disabled={isDisabled}
           {...inputProps}
         />
       )}
+
+      {helperText ? (
+        <Field.HelperText
+          position={helperOverlay ? "absolute" : "static"}
+          top={helperOverlay ? "100%" : undefined}
+          mt={helperOverlay ? 1 : undefined}
+        >
+          {helperText}
+        </Field.HelperText>
+      ) : null}
     </Field.Root>
   );
 };
+
 export default FormFieldInput;

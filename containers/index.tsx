@@ -12,10 +12,13 @@ export { default as AdministrarCampañasVacunacionScreen } from "./ABM/CampVacun
 export { default as SolicitudesScreen } from "./ABM/Solicitudes";
 export { default as ProgramaSanitarioScreen } from "./ABM/ProgramaSanitario/Alta";
 export { default as AdministrarProgramaSanitarioScreen } from "./ABM/ProgramaSanitario/Administrar";
+export { default as PersonalAltaPage } from "./ABM/Personal";
 
 //centro
 export { default as CentroSaludPage } from "./CentroDeSalud";
 export { default as HomePage } from "./Home";
+export { default as RegistroPacientePage } from "./CentroDeSalud/RegistrarPaciente";
+export { default as CrearTurnoPage } from "./CentroDeSalud/CrearTurno";
 
 //Feedback
 export { default as LoadingOrError } from "./Feedback/LoadingOrError";
