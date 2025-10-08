@@ -8,11 +8,12 @@
 
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"],
+      "@/*": ["*"],
       "@src/*": ["src/*"]
     },
 
-    "allowJs": true
+    "allowJs": true,
+    "strict": true
   },
   "include": ["src", "features", "store", "vite-env.d.ts"],
   "exclude": ["node_modules", "dist"]
