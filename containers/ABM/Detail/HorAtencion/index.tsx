@@ -124,7 +124,7 @@ export default function HorariosPage() {
         data={data}
         rowKey="day"
         size="md"
-        variant="simple"
+        variant="line"
       />
     </Stack>
   );
