@@ -177,7 +177,7 @@ export default function EspecialidadesPage() {
           data={data}
           rowKey="id"
           size="md"
-          variant="simple"
+          variant="line"
         />
       </Box>
     </Stack>
